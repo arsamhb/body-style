@@ -1,0 +1,29 @@
+# dependencies (matches node_modules at any depth: client/, server/)
+node_modules/
+
+# next.js (frontend)
+client/.next/
+client/out/
+client/next-env.d.ts
+
+# server build output
+server/dist/
+
+content
+content/
+
+# env files
+.env
+.env*.local
+client/.env
+server/.env
+
+# logs
+*.log
+npm-debug.log*
+
+# typescript
+*.tsbuildinfo
+
+# os / editor
+.DS_Store

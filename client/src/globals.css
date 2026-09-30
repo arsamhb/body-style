@@ -1,0 +1,451 @@
+@import 'tailwindcss';
+@plugin 'daisyui' {
+  themes: false;
+}
+
+/* `dark:` utilities follow the data-theme toggle, not the OS preference. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* =============================================================================
+   DESIGN SYSTEM
+   -----------------------------------------------------------------------------
+   1. Primitives  — raw palette values. To re-skin a site, change ONLY this block
+                    (usually just the --brand-* steps). Grayscale by default.
+   2. Semantic    — what the UI actually references (canvas, surface, ink, line,
+                    brand, status). Light values here, dark overrides below.
+   3. Scale       — type, radius, shadow, motion, layout tokens.
+   4. DaisyUI     — the admin panel components are mapped onto the same tokens.
+   5. Utilities   — patterns, hover effects, containers.
+   ========================================================================== */
+
+/* 1. PRIMITIVES ------------------------------------------------------------ */
+:root {
+  --gray-0: #ffffff;
+  --gray-50: #fafafa;
+  --gray-100: #f4f4f5;
+  --gray-150: #ececee;
+  --gray-200: #e4e4e7;
+  --gray-300: #d4d4d8;
+  --gray-400: #a1a1aa;
+  --gray-500: #71717a;
+  --gray-600: #52525b;
+  --gray-700: #3f3f46;
+  --gray-800: #27272a;
+  --gray-850: #1f1f23;
+  --gray-900: #18181b;
+  --gray-950: #09090b;
+
+  /* Brand ramp. Grayscale for the boilerplate; swap for the client's hue. */
+  --brand-100: var(--gray-100);
+  --brand-200: var(--gray-200);
+  --brand-500: var(--gray-900);
+  --brand-600: var(--gray-800);
+  --brand-700: var(--gray-700);
+  --brand-ink: var(--gray-0);
+
+  --green-500: #16a34a;
+  --green-100: #dcfce7;
+  --amber-500: #d97706;
+  --amber-100: #fef3c7;
+  --red-500: #dc2626;
+  --red-100: #fee2e2;
+}
+
+/* 2 + 3. SEMANTIC TOKENS + SCALE ------------------------------------------- */
+@theme {
+  /* Surfaces */
+  --color-canvas: var(--gray-0);
+  --color-canvas-subtle: var(--gray-50);
+  --color-surface: var(--gray-0);
+  --color-surface-raised: var(--gray-100);
+  --color-surface-sunken: var(--gray-150);
+
+  /* Text */
+  --color-ink: var(--gray-950);
+  --color-ink-muted: var(--gray-600);
+  --color-ink-subtle: var(--gray-400);
+  --color-ink-inverse: var(--gray-0);
+
+  /* Borders */
+  --color-line: var(--gray-200);
+  --color-line-strong: var(--gray-300);
+
+  /* Brand */
+  --color-brand: var(--brand-500);
+  --color-brand-hover: var(--brand-600);
+  --color-brand-active: var(--brand-700);
+  --color-brand-soft: var(--brand-100);
+  --color-brand-ink: var(--brand-ink);
+  --color-ring: var(--brand-500);
+
+  /* Status */
+  --color-success: var(--green-500);
+  --color-success-soft: var(--green-100);
+  --color-warning: var(--amber-500);
+  --color-warning-soft: var(--amber-100);
+  --color-danger: var(--red-500);
+  --color-danger-soft: var(--red-100);
+
+  /* Typography (fluid) */
+  --font-sans: var(--font-vazirmatn), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --text-display: clamp(2.5rem, 1.5rem + 4vw, 5.5rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.02em;
+  --text-h1: clamp(2rem, 1.25rem + 3vw, 3.75rem);
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.015em;
+  --text-h2: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  --text-h2--line-height: 1.2;
+  --text-h3: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --text-h3--line-height: 1.3;
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.4;
+  --text-lead: clamp(1.0625rem, 1rem + 0.5vw, 1.375rem);
+  --text-lead--line-height: 1.6;
+  --text-body: 1rem;
+  --text-body--line-height: 1.7;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.6;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.5;
+
+  /* Shape */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-pill: 9999px;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.06), 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-md: 0 6px 16px -4px rgb(0 0 0 / 0.1), 0 2px 6px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 20px 40px -12px rgb(0 0 0 / 0.16);
+  --shadow-glow: 0 0 0 4px color-mix(in oklab, var(--color-brand) 18%, transparent);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 500ms;
+
+  /* Layout */
+  --spacing-gutter: clamp(1rem, 4vw, 3rem);
+  --spacing-section-sm: clamp(2.5rem, 6vw, 4rem);
+  --spacing-section-md: clamp(4rem, 8vw, 7rem);
+  --spacing-section-lg: clamp(5rem, 10vw, 10rem);
+  --container-content: 72rem;
+  --container-wide: 96rem;
+  --container-tv: 120rem;
+
+  /* Breakpoints: sm 40rem, md 48rem, lg 64rem, xl 80rem, 2xl 96rem are Tailwind defaults. */
+  --breakpoint-xs: 30rem; /* 480px  — large phones */
+  --breakpoint-3xl: 120rem; /* 1920px — full HD TVs */
+  --breakpoint-4xl: 160rem; /* 2560px — 4K / big TVs */
+}
+
+/* Dark mode remaps ONLY semantic tokens. */
+:root[data-theme='dark'] {
+  --color-canvas: var(--gray-950);
+  --color-canvas-subtle: var(--gray-900);
+  --color-surface: var(--gray-900);
+  --color-surface-raised: var(--gray-850);
+  --color-surface-sunken: var(--gray-800);
+  --color-ink: var(--gray-50);
+  --color-ink-muted: var(--gray-400);
+  --color-ink-subtle: var(--gray-500);
+  --color-ink-inverse: var(--gray-950);
+  --color-line: var(--gray-800);
+  --color-line-strong: var(--gray-700);
+  --color-brand: var(--gray-50);
+  --color-brand-hover: var(--gray-200);
+  --color-brand-active: var(--gray-300);
+  --color-brand-soft: var(--gray-850);
+  --color-brand-ink: var(--gray-950);
+  --color-ring: var(--gray-50);
+  --color-success-soft: color-mix(in oklab, var(--green-500) 18%, transparent);
+  --color-warning-soft: color-mix(in oklab, var(--amber-500) 18%, transparent);
+  --color-danger-soft: color-mix(in oklab, var(--red-500) 18%, transparent);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 6px 16px -4px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 20px 40px -12px rgb(0 0 0 / 0.7);
+}
+
+/* Per-language font stack: the first variable wins. */
+html[lang='fa'] {
+  --font-sans: var(--font-vazirmatn), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+html[lang='en'] {
+  --font-sans: var(--font-inter), var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* 4. DAISYUI THEMES (admin panel) — mapped onto the semantic tokens ---------- */
+@plugin 'daisyui/theme' {
+  name: 'light';
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+  --color-base-100: var(--color-canvas);
+  --color-base-200: var(--color-surface-raised);
+  --color-base-300: var(--color-surface-sunken);
+  --color-base-content: var(--color-ink);
+  --color-primary: var(--color-brand);
+  --color-primary-content: var(--color-brand-ink);
+  --color-secondary: var(--color-ink-muted);
+  --color-secondary-content: var(--color-ink-inverse);
+  --color-accent: var(--color-brand);
+  --color-accent-content: var(--color-brand-ink);
+  --color-neutral: var(--color-ink);
+  --color-neutral-content: var(--color-ink-inverse);
+  --color-info: var(--color-ink-muted);
+  --color-info-content: var(--color-ink-inverse);
+  --color-success: var(--color-success);
+  --color-success-content: #ffffff;
+  --color-warning: var(--color-warning);
+  --color-warning-content: #ffffff;
+  --color-error: var(--color-danger);
+  --color-error-content: #ffffff;
+  --radius-selector: var(--radius-sm);
+  --radius-field: var(--radius-md);
+  --radius-box: var(--radius-lg);
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin 'daisyui/theme' {
+  name: 'dark';
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: var(--color-canvas);
+  --color-base-200: var(--color-surface-raised);
+  --color-base-300: var(--color-surface-sunken);
+  --color-base-content: var(--color-ink);
+  --color-primary: var(--color-brand);
+  --color-primary-content: var(--color-brand-ink);
+  --color-secondary: var(--color-ink-muted);
+  --color-secondary-content: var(--color-ink-inverse);
+  --color-accent: var(--color-brand);
+  --color-accent-content: var(--color-brand-ink);
+  --color-neutral: var(--color-ink);
+  --color-neutral-content: var(--color-ink-inverse);
+  --color-info: var(--color-ink-muted);
+  --color-info-content: var(--color-ink-inverse);
+  --color-success: var(--color-success);
+  --color-success-content: #ffffff;
+  --color-warning: var(--color-warning);
+  --color-warning-content: #ffffff;
+  --color-error: var(--color-danger);
+  --color-error-content: #ffffff;
+  --radius-selector: var(--radius-sm);
+  --radius-field: var(--radius-md);
+  --radius-box: var(--radius-lg);
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* BASE ---------------------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply min-h-dvh flex flex-col bg-canvas text-ink font-sans antialiased;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+  main {
+    @apply flex flex-col flex-grow;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading font-semibold text-ink text-balance;
+  }
+  p {
+    @apply text-pretty;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+  ::selection {
+    background: var(--color-brand);
+    color: var(--color-brand-ink);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* 5. UTILITIES -------------------------------------------------------------- */
+
+/* Containers: content (text-heavy), wide (grids), tv (huge screens still get a max). */
+@utility container-content {
+  width: 100%;
+  max-width: var(--container-content);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+@utility container-wide {
+  width: 100%;
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+@utility container-tv {
+  width: 100%;
+  max-width: var(--container-tv);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Section rhythm */
+@utility section-py {
+  padding-block: var(--spacing-section-md);
+}
+@utility section-py-sm {
+  padding-block: var(--spacing-section-sm);
+}
+@utility section-py-lg {
+  padding-block: var(--spacing-section-lg);
+}
+
+/* Background patterns (pure CSS, theme-aware, no image requests) */
+@utility bg-pattern-dots {
+  background-image: radial-gradient(var(--color-line-strong) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+@utility bg-pattern-grid {
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+@utility bg-gradient-subtle {
+  background-image:
+    radial-gradient(70% 60% at 50% 0%, var(--color-brand-soft), transparent 70%),
+    linear-gradient(180deg, var(--color-canvas-subtle), var(--color-canvas));
+}
+@utility bg-gradient-ink {
+  background-image: linear-gradient(135deg, var(--gray-900), var(--gray-800));
+}
+@utility mask-fade-edges {
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 45%, transparent 100%);
+}
+@utility mask-fade-bottom {
+  mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+}
+
+/* Interactive surfaces */
+@utility card-hover {
+  transition:
+    transform var(--duration-base) var(--ease-out-expo),
+    box-shadow var(--duration-base) var(--ease-out-expo),
+    border-color var(--duration-base) var(--ease-out-expo);
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-line-strong);
+  }
+}
+@utility icon-hover {
+  transition:
+    transform var(--duration-base) var(--ease-spring),
+    color var(--duration-base) var(--ease-out-expo),
+    background-color var(--duration-base) var(--ease-out-expo),
+    box-shadow var(--duration-base) var(--ease-out-expo);
+  &:hover {
+    transform: translateY(-2px) scale(1.06);
+    color: var(--color-brand);
+    box-shadow: var(--shadow-glow);
+  }
+}
+@utility icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-md);
+  background: var(--color-brand-soft);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+@utility link-underline {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: var(--underline-origin, left);
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+[dir='rtl'] .link-underline {
+  --underline-origin: right;
+}
+
+/* Plain multi-line text rendered as paragraphs */
+@utility prose-plain {
+  & > p + p {
+    margin-top: 1em;
+  }
+  & > p {
+    color: var(--color-ink-muted);
+  }
+}
+
+/* Visually hidden but focusable (skip link) */
+@utility skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -100%;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--color-brand);
+  color: var(--color-brand-ink);
+  border-radius: var(--radius-md);
+  &:focus {
+    top: 1rem;
+  }
+}
+
+/* Form helpers used by shared/UI/FormInputs */
+.custom-label-text {
+  @apply text-ink-muted text-small cursor-pointer label;
+}
+.custom-error-label {
+  @apply text-danger;
+}
+.custom-error-message {
+  @apply text-danger text-caption font-medium;
+}

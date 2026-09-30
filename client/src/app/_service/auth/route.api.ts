@@ -1,0 +1,15 @@
+const AUTH_ROUTE = '/auth';
+const AUTH_LOGIN_ROUTE = `${AUTH_ROUTE}/login`;
+const AUTH_REFRESH_ROUTE = `${AUTH_ROUTE}/refresh`;
+const AUTH_LOGOUT_ROUTE = `${AUTH_ROUTE}/logout`;
+const AUTH_ME_ROUTE = `${AUTH_ROUTE}/me`;
+const AUTH_PASSWORD_ROUTE = `${AUTH_ROUTE}/password`;
+
+export {
+  AUTH_ROUTE,
+  AUTH_LOGIN_ROUTE,
+  AUTH_REFRESH_ROUTE,
+  AUTH_LOGOUT_ROUTE,
+  AUTH_ME_ROUTE,
+  AUTH_PASSWORD_ROUTE,
+};

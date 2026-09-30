@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" role="img" aria-label="Mission">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e4e4e7"/><stop offset="1" stop-color="#a1a1aa"/></linearGradient>
+<pattern id="p" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#71717a" fill-opacity="0.35"/></pattern></defs>
+<rect width="1000" height="1000" fill="url(#g)"/><rect width="1000" height="1000" fill="url(#p)"/>
+<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="83" fill="#3f3f46" fill-opacity="0.7">Mission</text>
+</svg>

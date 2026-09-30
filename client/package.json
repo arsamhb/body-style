@@ -1,0 +1,54 @@
+{
+  "name": "mother-react-repo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "prepare": "cd .. && husky client/.husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tanstack/react-query": "^5.104.0",
+    "axios": "^1.20.0",
+    "clsx": "^2.1.1",
+    "formik": "^2.4.9",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^1.49.0",
+    "next": "^16.3.7",
+    "next-intl": "^4.14.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-toastify": "^11.1.0",
+    "server-only": "^0.0.1",
+    "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.104.0",
+    "@types/node": "^24.19.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "daisyui": "^5.7.46",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.7",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "postcss": "^8.5.28",
+    "prettier": "^3.9.9",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.3"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

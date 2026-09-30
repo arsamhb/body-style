@@ -1,0 +1,97 @@
+# Development stack: mongo + server + web, built from source. Production runs
+# deploy/compose.prod.yml instead (standalone, not an overlay on this file).
+#
+# Host ports come from PROJECT_SLOT in .env: `make up` exports HOST_*_PORT.
+# The `:-default` keeps plain `docker compose up` usable (it lands on slot 0).
+services:
+  mongo:
+    image: mongodb/mongodb-community-server:7.0-ubuntu2204
+    restart: unless-stopped
+    ports:
+      - '${HOST_MONGO_PORT:-27018}:27017'
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: ./server
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      MONGODB_URI: mongodb://mongo:27017/mern_boilerplate
+      CORS_ORIGIN: ${PUBLIC_WEB_URL:-http://localhost:${HOST_WEB_COMPOSE_PORT:-3010}}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?set a 32+ char secret in .env}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?set a 32+ char secret in .env}
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 7d
+      BCRYPT_SALT_ROUNDS: 10
+      TICKET_TOKEN_SECRET: ${TICKET_TOKEN_SECRET:-}
+      IP_HASH_SALT: ${IP_HASH_SALT:-}
+      # Server → web: on-demand cache invalidation after content writes.
+      REVALIDATE_URL: http://web:3000
+      REVALIDATE_SECRET: ${REVALIDATE_SECRET:?set REVALIDATE_SECRET in .env}
+      UPLOADS_DIR: /app/uploads
+      MAX_UPLOAD_MB: 5
+      DEFAULT_LOCALE: ${DEFAULT_LOCALE:-fa}
+      # Dev-only switches: Swagger UI and the demo seed accounts are off by default in production.
+      DOCS_ENABLED: 'true'
+      DEVELOPER_SEED_EMAIL: ${DEVELOPER_SEED_EMAIL:-developer@example.com}
+      DEVELOPER_SEED_PASSWORD: ${DEVELOPER_SEED_PASSWORD:-developer123}
+      ADMIN_SEED_EMAIL: ${ADMIN_SEED_EMAIL:-admin@example.com}
+      ADMIN_SEED_PASSWORD: ${ADMIN_SEED_PASSWORD:-changeme123}
+    volumes:
+      - uploads-data:/app/uploads
+    ports:
+      - '${HOST_API_PORT:-8000}:4000'
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:4000/health/ready').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  web:
+    build:
+      context: ./client
+      args:
+        # Inlined at build time (NEXT_PUBLIC_*) or used by next.config.ts rewrites.
+        NEXT_PUBLIC_BASE_URL: ${PUBLIC_API_URL:-http://localhost:${HOST_API_PORT:-8000}}
+        NEXT_PUBLIC_SITE_URL: ${PUBLIC_WEB_URL:-http://localhost:${HOST_WEB_COMPOSE_PORT:-3010}}
+        NEXT_PUBLIC_DEFAULT_LOCALE: ${DEFAULT_LOCALE:-fa}
+        API_INTERNAL_URL: http://server:4000
+    restart: unless-stopped
+    depends_on:
+      server:
+        condition: service_healthy
+    environment:
+      API_INTERNAL_URL: http://server:4000
+      REVALIDATE_SECRET: ${REVALIDATE_SECRET:?set REVALIDATE_SECRET in .env}
+    ports:
+      - '${HOST_WEB_COMPOSE_PORT:-3010}:3000'
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mongo-data:
+  uploads-data:

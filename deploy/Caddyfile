@@ -1,0 +1,36 @@
+# deploy/Caddyfile — this app's public routes. deploy.sh copies it to
+# /opt/platform/sites/mern-boilerplate.caddy and reloads Caddy on every deploy.
+#
+# `http://` prefix = TLS is terminated at Arvan CDN (proxy ON) and the origin
+# speaks plain HTTP. For a hostname that is DNS-only (no CDN), drop the prefix
+# and Caddy will obtain a certificate itself.
+# Upstreams are compose service names, resolved over the `edge` network.
+#
+# TODO(human): replace example.ir with the real domain. The same hostnames go
+# into ARGS_web in the Makefile and CORS_ORIGIN in /opt/mern-boilerplate/.env.
+#
+# TODO(human): visitor IPs. The API rate-limits logins and request forms per
+# client IP. By default Caddy replaces X-Forwarded-For with the address that
+# connected to it, which behind the CDN is a CDN edge server — so every visitor
+# behind the same edge would share one rate limit. To pass the real visitor IP:
+#   1. uncomment `trusted_proxies` below and list Arvan's CDN ranges (the same
+#      list as /opt/platform/cdn-ranges.txt),
+#   2. set TRUST_PROXY_HOPS=2 in /opt/mern-boilerplate/.env.
+# Do both or neither. See "Risks" in ADOPTION_REPORT.md.
+
+# The API. The browser calls it directly (NEXT_PUBLIC_BASE_URL). Its routes
+# (/auth, /admin, /public) are not prefixed, so it needs its own hostname.
+# In the CDN panel, add a cache-bypass rule for this hostname.
+http://api.example.ir {
+	encode gzip
+	reverse_proxy server:4000 {
+		# trusted_proxies <cdn range> <cdn range> ...
+	}
+}
+
+# The website and the admin panel (/admin). Uploaded media is served from this
+# hostname too: Next rewrites /uploads/* to the API over the internal network.
+http://example.ir, http://www.example.ir {
+	encode gzip
+	reverse_proxy web:3000
+}

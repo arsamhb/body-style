@@ -1,0 +1,35 @@
+# .github/workflows/ci.yml — gate on every push/PR to main: lint, test, build.
+# Copied from the infra repo. Adjust ONLY the toolchain block and the service
+# containers; lint/test/build themselves go through make so CI and laptop agree.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # ---- toolchain (edit per app) ----
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            server/package-lock.json
+            client/package-lock.json
+      - run: npm ci
+        working-directory: server
+      - run: npm ci
+        working-directory: client
+      # ----------------------------------
+
+      - run: make lint
+      - run: make test
+      - name: build images (no push)
+        run: make build VERSION=ci

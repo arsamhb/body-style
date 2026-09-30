@@ -1,0 +1,49 @@
+# .github/workflows/release.yml — ship + deploy on a version tag.
+# Copied from the infra repo; identical in every app. Needs two repo secrets:
+#   DEPLOY_HOST     e.g. deploy@1.2.3.4
+#   DEPLOY_SSH_KEY  private key whose public half bootstrap.sh installed
+# The runner is abroad, the VPS is in Iran: that direction works. The same
+# `make ship` / `make deploy` run from your laptop when GitHub is unreachable.
+name: release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Existing tag to deploy, e.g. v1.2.0"
+        required: true
+      at:
+        description: 'Optional: schedule on the host, "YYYY-MM-DD HH:MM" (Asia/Tehran)'
+        required: false
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  ship-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      VERSION: ${{ github.event.inputs.version || github.ref_name }}
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      AT: ${{ github.event.inputs.at }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.version || github.ref_name }}
+
+      - name: install ssh key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${DEPLOY_HOST#*@}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: build + ship images
+        run: make ship VERSION="$VERSION"
+
+      - name: deploy (or schedule)
+        run: make deploy VERSION="$VERSION" AT="$AT"
