@@ -1,4 +1,4 @@
-# Adoption report — mern-boilerplate
+# Adoption report — ghahremani-bodystyle
 
 Slot: 5   Units: `server`, `web`   DB: mongo   infra version: 2
 
@@ -33,7 +33,7 @@ Not verified (needs a real server): `make ship`, `make deploy`, the GitHub workf
 ## Changes made
 
 1. **Vendor** — `infra/` copied verbatim from `infra/vendor` (v2).
-2. **Makefile** — new. `APP=mern-boilerplate`, `UNITS=server web`, `DB_KIND=mongo`, `MIGRATE` empty. App targets below the include: `dev-db`, `dev-api`, `dev-web`, `dev-seed`, `seed-prod`, `app-secrets`.
+2. **Makefile** — new. `APP=ghahremani-bodystyle`, `UNITS=server web`, `DB_KIND=mongo`, `MIGRATE` empty. App targets below the include: `dev-db`, `dev-api`, `dev-web`, `dev-seed`, `seed-prod`, `app-secrets`.
 3. **Port slot** — `PROJECT_SLOT=5` in `.env.example` and the local `.env`. `docker-compose.yml` publishes `${HOST_API_PORT}`, `${HOST_WEB_COMPOSE_PORT}`, `${HOST_MONGO_PORT}`; the public URLs baked into the dev web image follow the slot. The OpenAPI `servers` entry is now relative instead of `localhost:4000`.
 4. **Health** — `GET /health/ready` (MongoDB ping, 503 when down) next to `/health`; `GET /api/health` in the Next app; healthchecks wired in both compose files. Health routes were removed from the OpenAPI document (contract §3).
 5. **Dockerfiles** — client: `npm ci --ignore-scripts`, and `HOSTNAME=0.0.0.0` in the runtime stage (without it the standalone server binds to the container hostname, so the healthcheck and one of the two networks cannot reach it). Server: `uploads` added to `.dockerignore`.
@@ -59,7 +59,7 @@ Not verified (needs a real server): `make ship`, `make deploy`, the GitHub workf
 1. **Domain.** `example.ir` is a placeholder in three places that must agree: `ARGS_web` in the `Makefile`, `deploy/Caddyfile`, and `CORS_ORIGIN` in the server's `.env`. The layout assumes two hostnames: `<domain>` (+ `www`) for the site and `api.<domain>` for the API.
 2. **`DEPLOY_HOST`** in the `Makefile` (`deploy@TODO`) once the VPS exists; GitHub secrets `DEPLOY_HOST` and `DEPLOY_SSH_KEY` for tag deploys.
 3. **Git remote.** `origin` of this repo points at `VerveDevLab/BOXOPEN-MONOREPO.git`. `make release` pushes commits and tags to `origin` — confirm or fix the remote before the first release. Nothing was pushed during adoption.
-4. **Secrets.** Create `/opt/mern-boilerplate/.env` from `deploy/.env.prod.example`; `make app-secrets` prints values for every `change-me`. (`make secrets` from the template prints Postgres-oriented names; `app-secrets` covers this app.)
+4. **Secrets.** Create `/opt/ghahremani-bodystyle/.env` from `deploy/.env.prod.example`; `make app-secrets` prints values for every `change-me`. (`make secrets` from the template prints Postgres-oriented names; `app-secrets` covers this app.)
 5. **Visitor IPs behind the CDN** — see the first risk. Needs Arvan's CDN ranges.
 6. **Uploads backup** — see the second risk. Decide before real content is uploaded.
 7. **First deploy.** After `make deploy`, run `make seed-prod` once. It creates the two accounts and the demo content (pages, catalog, sample tickets); remove the demo content you do not want through the panel.

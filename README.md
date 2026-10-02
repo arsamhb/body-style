@@ -40,15 +40,15 @@ make logs S=server              # or: make ps · make sh S=server · make down
 ```
 
 Host ports come from `PROJECT_SLOT` in `.env`, never from a hardcoded number, so several projects
-can run side by side. This repo is slot 5; **a project cloned from it takes the next free slot**
+can run side by side. This repo is slot 9; **a project cloned from it takes the next free slot**
 (`make ports` lists the taken ones, `make up` refuses a slot another repo already uses).
 
-| | Formula | Slot 5 |
+| | Formula | Slot 9 |
 | --- | --- | --- |
-| API (+ `/docs`) | 8000 + N×100 | http://localhost:8500 |
-| Web in Docker (`make up`) — panel at `/admin` | 3010 + N×100 | http://localhost:3510 |
-| Web native (`make dev-web`) | 3000 + N×100 | http://localhost:3500 |
-| MongoDB | 27018 + N | localhost:27023 |
+| API (+ `/docs`) | 8000 + N×100 | http://localhost:8900 |
+| Web in Docker (`make up`) — panel at `/admin` | 3010 + N×100 | http://localhost:3910 |
+| Web native (`make dev-web`) | 3000 + N×100 | http://localhost:3900 |
+| MongoDB | 27018 + N | localhost:27027 |
 
 ## Run locally (native dev servers)
 

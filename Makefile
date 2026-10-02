@@ -1,5 +1,5 @@
 # =============================================================================
-# mern-boilerplate — Makefile. App-specific settings only; every target comes
+# ghahremani-bodystyle — Makefile. App-specific settings only; every target comes
 # from infra/common.mk (vendored, do not edit). Run `make help`.
 #
 # Keep comments on their own lines: make keeps trailing spaces before an
@@ -8,7 +8,7 @@
 
 # ---- identity ---------------------------------------------------------------
 # must equal `name:` in deploy/compose.prod.yml
-APP   := mern-boilerplate
+APP   := ghahremani-bodystyle
 # one entry per IMAGE (Dockerfile); named after the compose services
 UNITS := server web
 
@@ -51,7 +51,7 @@ SEED_CMD = $(COMPOSE) exec server node dist/db/seed/index.js
 include infra/common.mk
 
 # ---- app-specific extra targets go below this line -------------------------
-MONGO_DEV_URI := mongodb://localhost:$(HOST_MONGO_PORT)/mern_boilerplate
+MONGO_DEV_URI := mongodb://localhost:$(HOST_MONGO_PORT)/ghahremani_bodystyle
 
 dev-db: doctor ## Start only MongoDB, for the native dev servers below
 	$(COMPOSE) up -d mongo

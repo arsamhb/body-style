@@ -8,7 +8,7 @@
 MERN-BOILERPLATE (monorepo, no root package.json, Node 24 — .nvmrc, Dockerfiles, engines)
 │
 ├── ROOT = dev + deploy tooling (infra template, adopted 2026-09-30 — see ADOPTION_REPORT.md)
-│   ├── Makefile ── APP=mern-boilerplate, UNITS=server web (one per image), ARGS_web (NEXT_PUBLIC_* build args), DB_KIND=mongo,
+│   ├── Makefile ── APP=ghahremani-bodystyle, UNITS=server web (one per image), ARGS_web (NEXT_PUBLIC_* build args), DB_KIND=mongo,
 │   │     MIGRATE empty; then `include infra/common.mk`. App targets below the include: dev-db, dev-api, dev-web, dev-seed, seed-prod, app-secrets
 │   ├── infra/ ── VENDORED from ~/Desktop/dev/infra/vendor (common.mk = every make target, deploy.sh = host-side switch). Never edit here.
 │   ├── docker-compose.yml ── DEV stack: mongo → server → web, healthchecks on all three. Host ports from PROJECT_SLOT (.env):
@@ -16,10 +16,10 @@ MERN-BOILERPLATE (monorepo, no root package.json, Node 24 — .nvmrc, Dockerfile
 │   │     server: MONGODB_URI, JWT_*, REVALIDATE_URL=http://web:3000, REVALIDATE_SECRET, UPLOADS_DIR=/app/uploads (volume uploads-data), DOCS_ENABLED=true
 │   │     web (BUILD ARGS, inlined): NEXT_PUBLIC_BASE_URL, NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_DEFAULT_LOCALE, API_INTERNAL_URL=http://server:4000
 │   ├── deploy/ ── PRODUCTION, standalone (not an overlay on the dev file)
-│   │     compose.prod.yml: images mern-boilerplate-{server,web}:${APP_VERSION}, no ports/build, networks default+edge, hardening block,
+│   │     compose.prod.yml: images ghahremani-bodystyle-{server,web}:${APP_VERSION}, no ports/build, networks default+edge, hardening block,
 │   │       only `server` loads .env; web gets API_INTERNAL_URL + REVALIDATE_SECRET; mongo with root auth, volumes mongo-data + uploads-data
 │   │     Caddyfile: http://api.<domain> → server:4000 · http://<domain>, www → web:3000 (TLS at Arvan CDN)
-│   │     .env.prod.example: template for /opt/mern-boilerplate/.env on the VPS (placeholders = `change-me`, deploy.sh refuses them)
+│   │     .env.prod.example: template for /opt/ghahremani-bodystyle/.env on the VPS (placeholders = `change-me`, deploy.sh refuses them)
 │   ├── .github/workflows/ ── ci.yml (make lint, test, build) · release.yml (tag vX.Y.Z → make ship + make deploy)
 │   ├── .env.example ── PROJECT_SLOT + dev-stack secrets (JWT_*, REVALIDATE_SECRET, TICKET_TOKEN_SECRET, IP_HASH_SALT)
 │   └── README.md ── features, run instructions, make vocabulary, slot rule, seed accounts

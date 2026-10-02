@@ -27,7 +27,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 4000
-      MONGODB_URI: mongodb://mongo:27017/mern_boilerplate
+      MONGODB_URI: mongodb://mongo:27017/ghahremani_bodystyle
       CORS_ORIGIN: ${PUBLIC_WEB_URL:-http://localhost:${HOST_WEB_COMPOSE_PORT:-3010}}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?set a 32+ char secret in .env}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?set a 32+ char secret in .env}

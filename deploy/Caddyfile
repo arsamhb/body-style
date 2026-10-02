@@ -1,5 +1,5 @@
 # deploy/Caddyfile — this app's public routes. deploy.sh copies it to
-# /opt/platform/sites/mern-boilerplate.caddy and reloads Caddy on every deploy.
+# /opt/platform/sites/ghahremani-bodystyle.caddy and reloads Caddy on every deploy.
 #
 # `http://` prefix = TLS is terminated at Arvan CDN (proxy ON) and the origin
 # speaks plain HTTP. For a hostname that is DNS-only (no CDN), drop the prefix
@@ -7,7 +7,7 @@
 # Upstreams are compose service names, resolved over the `edge` network.
 #
 # TODO(human): replace example.ir with the real domain. The same hostnames go
-# into ARGS_web in the Makefile and CORS_ORIGIN in /opt/mern-boilerplate/.env.
+# into ARGS_web in the Makefile and CORS_ORIGIN in /opt/ghahremani-bodystyle/.env.
 #
 # TODO(human): visitor IPs. The API rate-limits logins and request forms per
 # client IP. By default Caddy replaces X-Forwarded-For with the address that
@@ -15,7 +15,7 @@
 # behind the same edge would share one rate limit. To pass the real visitor IP:
 #   1. uncomment `trusted_proxies` below and list Arvan's CDN ranges (the same
 #      list as /opt/platform/cdn-ranges.txt),
-#   2. set TRUST_PROXY_HOPS=2 in /opt/mern-boilerplate/.env.
+#   2. set TRUST_PROXY_HOPS=2 in /opt/ghahremani-bodystyle/.env.
 # Do both or neither. See "Risks" in ADOPTION_REPORT.md.
 
 # The API. The browser calls it directly (NEXT_PUBLIC_BASE_URL). Its routes

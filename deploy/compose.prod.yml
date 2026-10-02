@@ -1,8 +1,8 @@
 # =============================================================================
 # deploy/compose.prod.yml — the production stack. STANDALONE: it is not an
 # overlay on the dev compose file.
-# `make ship` copies it to /opt/mern-boilerplate/compose.yml; deploy.sh runs it
-# with --env-file /opt/mern-boilerplate/.env, which holds secrets and APP_VERSION.
+# `make ship` copies it to /opt/ghahremani-bodystyle/compose.yml; deploy.sh runs it
+# with --env-file /opt/ghahremani-bodystyle/.env, which holds secrets and APP_VERSION.
 #
 # Rules (see the infra repo's CONTRACT.md):
 #   - images are <app>-<unit>:${APP_VERSION}, never :latest, never build:
@@ -11,7 +11,7 @@
 #   - no one-shot services (they would count as "not healthy")
 #   - the database has no ports, a named volume, and a healthcheck
 # =============================================================================
-name: mern-boilerplate   # must equal APP in the Makefile
+name: ghahremani-bodystyle   # must equal APP in the Makefile
 
 # Hardening applied to every app service:
 #   no-new-privileges  a process cannot gain privileges via setuid binaries
@@ -38,7 +38,7 @@ x-node-health: &node-health
 services:
   server:
     <<: *app
-    image: mern-boilerplate-server:${APP_VERSION}
+    image: ghahremani-bodystyle-server:${APP_VERSION}
     # the backend is the only service that gets the whole secret file
     env_file: .env
     environment:
@@ -60,7 +60,7 @@ services:
 
   web:
     <<: *app
-    image: mern-boilerplate-web:${APP_VERSION}
+    image: ghahremani-bodystyle-web:${APP_VERSION}
     # explicit list only — NEXT_PUBLIC_* are already baked in at build time
     environment:
       NODE_ENV: production
