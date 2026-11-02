@@ -1,6 +1,7 @@
 import type { LucideProps } from 'lucide-react';
 import { forwardRef } from 'react';
 import {
+  Activity,
   Anchor,
   ArrowDown,
   ArrowLeft,
@@ -31,6 +32,7 @@ import {
   Copy,
   Cpu,
   Download,
+  Dumbbell,
   Droplet,
   ExternalLink,
   Eye,
@@ -155,6 +157,7 @@ export const ICONS = {
   'arrow-up-right': ArrowUpRight,
   award: Award,
   'badge-check': BadgeCheck,
+  activity: Activity,
   bike: Bike,
   box: Box,
   briefcase: Briefcase,
@@ -177,6 +180,7 @@ export const ICONS = {
   copy: Copy,
   cpu: Cpu,
   download: Download,
+  dumbbell: Dumbbell,
   droplet: Droplet,
   'external-link': ExternalLink,
   eye: Eye,

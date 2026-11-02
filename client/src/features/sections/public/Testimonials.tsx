@@ -7,17 +7,25 @@ const Testimonials = ({ section }: SectionComponentProps<'testimonials'>) => {
   const { heading, items } = section.props;
   return (
     <SectionShell id={section.key} heading={heading} align="center" background="dots">
-      <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" role="list">
+      <ul
+        className="grid gap-px border border-line bg-line md:grid-cols-2 lg:grid-cols-3"
+        role="list"
+      >
         {items.map((item, i) => (
           <li key={i}>
-            <figure className="flex h-full flex-col gap-6 rounded-lg border border-line bg-surface p-6 lg:p-8 shadow-xs">
-              <IconByName name="quote" className="size-6 text-ink-subtle" />
-              <blockquote className="text-body text-ink flex-grow">{item.quote}</blockquote>
-              <figcaption className="flex items-center gap-3">
+            <figure className="group flex h-full min-h-72 flex-col gap-7 bg-surface p-6 transition-colors hover:bg-surface-raised lg:p-8">
+              <div className="flex items-center justify-between">
+                <IconByName name="quote" className="size-8 text-brand-strong" />
+                <span className="text-caption font-bold tracking-[0.16em] text-ink-subtle">
+                  / {String(i + 1).padStart(2, '0')}
+                </span>
+              </div>
+              <blockquote className="flex-grow text-lead text-ink">{item.quote}</blockquote>
+              <figcaption className="flex items-center gap-3 border-t border-line pt-5">
                 <SmartImage
                   src={item.avatar}
                   alt=""
-                  className="size-11 rounded-full"
+                  className="size-11 rounded-xs border border-line-strong"
                   sizes="44px"
                   placeholderIcon="user"
                 />

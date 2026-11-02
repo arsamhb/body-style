@@ -15,13 +15,16 @@ const ContactInfo = ({ section, site }: SectionComponentProps<'contactInfo'>) =>
           return (
             <li
               key={way.id}
-              className="flex flex-col gap-5 rounded-lg border border-line bg-surface p-6 lg:p-8 card-hover"
+              className="group relative flex flex-col gap-5 overflow-hidden rounded-xs border border-line bg-surface p-6 lg:p-8 card-hover"
             >
+              <span className="absolute inset-y-0 start-0 w-0.5 origin-bottom scale-y-0 bg-brand transition-transform duration-base group-hover:scale-y-100" />
               <span className="icon-tile size-16 icon-hover">
                 <IconByName name={way.icon} className="size-8" strokeWidth={1.5} />
               </span>
               <div className="flex flex-col gap-1.5">
-                <h3 className="text-h4">{way.label}</h3>
+                <h3 className="text-h4 transition-colors group-hover:text-brand-strong">
+                  {way.label}
+                </h3>
                 <p className="text-small text-ink-muted">{way.description}</p>
               </div>
               {href ? (

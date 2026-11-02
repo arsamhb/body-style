@@ -22,8 +22,8 @@ export interface SectionShellProps {
 
 const BG_CLASS: Record<SectionBackground, string> = {
   none: '',
-  subtle: 'bg-canvas-subtle',
-  sunken: 'bg-surface-sunken',
+  subtle: 'border-y border-line/70 bg-canvas-subtle',
+  sunken: 'border-y border-line bg-surface-sunken',
   dots: 'bg-pattern-dots',
   grid: 'bg-pattern-grid',
 };
@@ -53,8 +53,19 @@ const SectionShell = ({
     <section
       id={id}
       aria-labelledby={headingId}
-      className={clsx('relative', SIZE_CLASS[size], BG_CLASS[background], className)}
+      className={clsx(
+        'relative isolate overflow-hidden',
+        SIZE_CLASS[size],
+        BG_CLASS[background],
+        className
+      )}
     >
+      {background !== 'none' && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute end-0 top-0 -z-10 size-72 translate-x-1/3 -translate-y-1/3 rounded-full bg-accent/5 blur-3xl"
+        />
+      )}
       <Container size={container} className="flex flex-col gap-10 lg:gap-14">
         {(heading || text) && (
           <header
@@ -65,12 +76,13 @@ const SectionShell = ({
           >
             <div className="flex flex-col gap-3 max-w-3xl">
               {eyebrow && (
-                <span className="text-caption font-medium uppercase tracking-[0.18em] text-ink-subtle">
+                <span className="inline-flex items-center gap-2 text-caption font-bold uppercase tracking-[0.2em] text-accent">
+                  <span className="h-px w-7 bg-accent" aria-hidden />
                   {eyebrow}
                 </span>
               )}
               {heading && (
-                <Heading id={headingId} className="text-h2">
+                <Heading id={headingId} className="text-h1 max-w-4xl">
                   {heading}
                 </Heading>
               )}

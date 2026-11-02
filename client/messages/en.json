@@ -33,7 +33,11 @@
   "footer": {
     "quickLinks": "Quick links",
     "contact": "Contact",
-    "allRightsReserved": "All rights reserved."
+    "allRightsReserved": "All rights reserved.",
+    "legalNotice": "All material and intellectual rights of the Body Style website are reserved; any copying is subject to legal action.",
+    "phones": "Phone and email",
+    "callUs": "Call us",
+    "visit": "Address and hours"
   },
   "ticket": {
     "title": "Request a call",
@@ -83,7 +87,9 @@
   },
   "sections": {
     "faqHint": "Didn't find your answer?",
-    "mapPlaceholder": "Map will be shown here"
+    "mapPlaceholder": "Map will be shown here",
+    "callNow": "Call now",
+    "sendMessage": "Send a message"
   },
   "validation": {
     "required": "This field is required.",

@@ -19,7 +19,7 @@ const NavLinks = ({ items, orientation = 'horizontal', onNavigate }: NavLinksPro
     <ul
       className={clsx(
         'flex',
-        orientation === 'horizontal' ? 'items-center gap-1' : 'flex-col gap-1'
+        orientation === 'horizontal' ? 'items-center gap-3' : 'flex-col gap-1'
       )}
       role="list"
     >
@@ -32,11 +32,13 @@ const NavLinks = ({ items, orientation = 'horizontal', onNavigate }: NavLinksPro
               onClick={onNavigate}
               aria-current={active ? 'page' : undefined}
               className={clsx(
-                'block rounded-md px-3 py-2 text-small font-medium transition-colors duration-fast',
-                orientation === 'vertical' && 'px-4 py-3 text-body',
+                'relative block px-3 py-2 text-caption font-bold uppercase tracking-[0.12em] transition-colors duration-fast',
+                'after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-center after:bg-brand after:transition-transform after:duration-base after:ease-out-expo',
+                orientation === 'vertical' &&
+                  'border-b border-line px-2 py-4 text-body after:hidden',
                 active
-                  ? 'bg-surface-raised text-ink'
-                  : 'text-ink-muted hover:bg-surface-raised hover:text-ink'
+                  ? 'text-brand-strong after:scale-x-100'
+                  : 'text-ink-muted after:scale-x-0 hover:text-ink hover:after:scale-x-100'
               )}
             >
               {item.label}

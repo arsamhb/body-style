@@ -18,17 +18,18 @@ export interface CtaProps {
 
 export const ctaClassName = (variant: CtaVariant = 'primary', size: CtaSize = 'md') =>
   clsx(
-    'inline-flex items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap',
+    'inline-flex items-center justify-center gap-2 rounded-xs font-bold uppercase tracking-[0.08em] whitespace-nowrap brand-scan kinetic-arrow',
     'transition-[background-color,color,border-color,box-shadow,transform] duration-base ease-out-expo',
     'focus-visible:shadow-glow active:translate-y-px',
     {
-      'bg-brand text-brand-ink hover:bg-brand-hover': variant === 'primary',
-      'bg-surface text-ink border border-line-strong hover:border-ink hover:bg-surface-raised':
+      'border border-brand bg-brand text-brand-ink shadow-[4px_4px_0_color-mix(in_oklab,var(--color-accent)_45%,transparent)] hover:-translate-y-0.5 hover:bg-brand-hover hover:shadow-[6px_6px_0_color-mix(in_oklab,var(--color-accent)_60%,transparent)]':
+        variant === 'primary',
+      'bg-surface text-ink border border-line-strong hover:-translate-y-0.5 hover:border-brand hover:text-brand-strong':
         variant === 'secondary',
-      'text-ink hover:bg-surface-raised': variant === 'ghost',
-      'h-9 px-4 text-small': size === 'sm',
-      'h-11 px-6 text-body': size === 'md',
-      'h-13 px-8 text-lead': size === 'lg',
+      'text-ink hover:bg-surface-raised hover:text-brand-strong': variant === 'ghost',
+      'h-9 px-4 text-caption': size === 'sm',
+      'h-11 px-6 text-small': size === 'md',
+      'h-13 px-8 text-body': size === 'lg',
     }
   );
 

@@ -10,17 +10,24 @@ const Faq = ({ section }: SectionComponentProps<'faq'>) => {
   const { heading, text, items } = section.props;
   return (
     <SectionShell id={section.key} heading={heading} text={text} container="content">
-      <div className="flex flex-col divide-y divide-line rounded-lg border border-line bg-surface">
+      <div className="flex flex-col divide-y divide-line border border-line bg-surface">
         {items.map((item, i) => (
-          <details key={i} className="group" name={`${section.key}-faq`}>
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-body font-medium marker:hidden [&::-webkit-details-marker]:hidden">
-              <span>{item.question}</span>
+          <details
+            key={i}
+            className="group transition-colors open:bg-surface-raised"
+            name={`${section.key}-faq`}
+          >
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-5 text-body font-bold marker:hidden hover:text-brand-strong md:px-7 [&::-webkit-details-marker]:hidden">
+              <span className="flex items-center gap-4">
+                <span className="text-caption text-accent">{String(i + 1).padStart(2, '0')}</span>
+                {item.question}
+              </span>
               <IconByName
                 name="chevron-down"
-                className="size-5 shrink-0 text-ink-subtle transition-transform duration-base ease-out-expo group-open:rotate-180"
+                className="size-5 shrink-0 text-brand-strong transition-transform duration-base ease-out-expo group-open:rotate-180"
               />
             </summary>
-            <div className="px-5 pb-5">
+            <div className="border-s border-accent/50 px-5 pb-6 ms-9 md:px-7">
               <Paragraphs text={item.answer} className="text-small" />
             </div>
           </details>

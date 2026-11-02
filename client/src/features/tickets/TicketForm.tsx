@@ -25,7 +25,7 @@ interface TicketFormProps {
 const TOKEN_ERRORS = new Set(['TOKEN_INVALID', 'TOKEN_TOO_EARLY', 'TOKEN_EXPIRED', 'TOKEN_USED']);
 
 const inputClass =
-  'w-full rounded-md border border-line-strong bg-surface px-4 py-3 text-body text-ink placeholder:text-ink-subtle transition-[border-color,box-shadow] duration-fast focus:border-ink focus:outline-none focus:shadow-glow aria-[invalid=true]:border-danger';
+  'w-full rounded-xs border border-line-strong bg-canvas-subtle px-4 py-3 text-body text-ink placeholder:text-ink-subtle transition-[border-color,box-shadow,background-color] duration-fast hover:border-ink-subtle focus:border-brand focus:bg-surface focus:outline-none focus:shadow-glow aria-[invalid=true]:border-danger';
 
 const Field = ({
   name,
@@ -139,7 +139,7 @@ const TicketForm = ({ source, compact, className }: TicketFormProps) => {
       <div
         role="status"
         className={clsx(
-          'flex flex-col items-center gap-3 rounded-lg border border-line bg-surface p-8 text-center',
+          'flex flex-col items-center gap-3 rounded-xs border border-line bg-surface p-8 text-center',
           className
         )}
       >
@@ -165,7 +165,7 @@ const TicketForm = ({ source, compact, className }: TicketFormProps) => {
         <Form
           noValidate
           className={clsx(
-            'relative flex flex-col gap-4 rounded-lg border border-line bg-surface p-6 shadow-xs',
+            'relative flex flex-col gap-5 rounded-xs border border-line bg-surface p-6 shadow-md before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-gradient-to-r before:from-brand before:via-accent before:to-transparent',
             compact ? '' : 'lg:p-8',
             className
           )}

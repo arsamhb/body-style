@@ -5,7 +5,8 @@ import {
   SectionBase,
   SectionType,
 } from '../../modules/pages/sections.types';
-import { L, P } from './content';
+import { CATEGORY_TREE } from './catalog';
+import { L, MISSING } from './content';
 
 interface SeedSection {
   key: string;
@@ -19,6 +20,25 @@ const section = (
   props: Record<string, unknown>,
 ): SeedSection => ({ key, type, props });
 
+/** One card per top-level category of the client's shop, listing its sub-categories. */
+const categoryCard = (slug: string, icon: string) => {
+  const node = CATEGORY_TREE.find((c) => c.slug === slug)!;
+  return {
+    icon,
+    title: L(node.fa, node.en),
+    text: L(
+      node.children.map((c) => c.fa).join('، '),
+      node.children.map((c) => c.en).join(', '),
+    ),
+    href: `/catalog/products?category=${node.slug}`,
+  };
+};
+
+/**
+ * Page copy. Landing, About and Contact text comes from the client's live site
+ * (bodystyleco.com); sections the site has no content for (projects, testimonials, partner
+ * logos) are left out rather than shown as placeholders.
+ */
 const PAGES: Record<
   PageKey,
   {
@@ -26,115 +46,72 @@ const PAGES: Record<
     sections: SeedSection[];
   }
 > = {
+  // Source: bodystyleco.com (home page).
   landing: {
     seo: {
-      title: L('پارس تجهیز', 'Pars Equipment'),
+      title: L(
+        'بادی استایل | تولیدکننده دستگاه‌های بدنسازی خانگی و باشگاهی',
+        'Body Style | Home and commercial gym machine manufacturer',
+      ),
       description: L(
-        'راه‌حل‌های صنعتی قابل اعتماد، از طراحی تا اجرا',
-        'Reliable industrial solutions, from design to delivery',
+        'فروش مستقیم تجهیزات بدنسازی باشگاهی و خانگی بادی استایل با قیمت کارخانه، ضمانت اصلی، خدمات پس از فروش و ارسال به سراسر ایران.',
+        'Body Style home and commercial gym equipment sold direct at factory prices, with a genuine warranty, after-sales service and delivery across Iran.',
       ),
     },
     sections: [
       section('landing-hero', 'hero', {
-        eyebrow: L('از ۱۳۸۲ در کنار صنعت', 'Serving industry since 2003'),
-        title: L('پارس تجهیز', 'Pars Equipment'),
+        eyebrow: L('بادی استایل', 'Body Style'),
+        title: L(
+          'فروش مستقیم تجهیزات بدنسازی باشگاهی با قیمت کارخانه',
+          'Commercial gym equipment, direct at factory prices',
+        ),
         subtitle: L(
-          'راه‌حل‌های صنعتی قابل اعتماد، از طراحی تا اجرا',
-          'Reliable industrial solutions, from design to delivery',
+          'تولیدکننده دستگاه‌های بدنسازی خانگی و باشگاهی با ضمانت اصلی',
+          'Manufacturer of home and commercial gym machines with a genuine warranty',
         ),
         primaryCta: {
-          label: L('مشاهده محصولات', 'Browse products'),
+          label: L('کلیه محصولات', 'All products'),
           href: '/catalog/products',
         },
         secondaryCta: {
-          label: L('درخواست مشاوره', 'Request a call'),
+          label: L('ارتباط با ما', 'Contact us'),
           href: '/contact',
         },
         backgroundImage: '',
         pattern: 'dots',
       }),
       section('landing-intro', 'intro', {
-        heading: L('چه کاری انجام می‌دهیم؟', 'What we do'),
-        body: L(
-          'ما تأمین‌کننده تجهیزات و قطعات صنعتی برای کارخانه‌ها و پیمانکاران هستیم. از مشاوره فنی و انتخاب محصول تا تأمین، نصب و خدمات پس از فروش در کنار شما هستیم.\n\nتمرکز ما بر کیفیت پایدار، تحویل به‌موقع و پشتیبانی واقعی است.',
-          'We supply industrial equipment and parts to factories and contractors. From technical consulting and product selection to procurement, installation and after-sales service, we stay with you.\n\nOur focus is consistent quality, on-time delivery and real support.',
+        heading: L(
+          'بادی استایل؛ همراه شما در مسیر تناسب اندام',
+          'Body Style: with you on the road to fitness',
         ),
-        image: `${P}/hero.svg`,
+        body: L(
+          'در دنیای امروز، داشتن تناسب اندام و سبک زندگی سالم به یکی از مهم‌ترین دغدغه‌های افراد تبدیل شده است. بادی استایل به‌عنوان تولیدکننده تخصصی دستگاه‌های بدنسازی خانگی و باشگاهی، با هدف فراهم‌کردن تجهیزات ورزشی باکیفیت، ایمن و حرفه‌ای، فعالیت خود را آغاز کرده و امروز به یکی از برندهای معتبر این حوزه در ایران تبدیل شده است.\n\nچه به‌دنبال خرید دستگاه بدنسازی خانگی باشید و چه قصد تجهیز یک باشگاه حرفه‌ای را داشته باشید، بادی استایل همراه مطمئن شماست. ما باور داریم که تجهیزات ورزشی باکیفیت، مسیر رسیدن به تناسب اندام را هموارتر می‌کنند.',
+          'Today, staying fit and living healthily is one of people’s main concerns. Body Style is a specialist manufacturer of home and commercial gym machines. It set out to provide high-quality, safe and professional sports equipment, and is now one of the trusted brands in this field in Iran.\n\nWhether you are buying a home gym machine or equipping a professional gym, Body Style is a partner you can rely on. We believe quality equipment makes the road to fitness smoother.',
+        ),
+        image: '',
         imagePosition: 'end',
         cta: { label: L('درباره ما', 'About us'), href: '/about' },
       }),
       section('landing-features', 'features', {
-        eyebrow: L('خدمات ویژه', 'Highlights'),
-        heading: L(
-          'چرا مشتریان ما را انتخاب می‌کنند',
-          'Why customers choose us',
-        ),
+        eyebrow: L('', ''),
+        heading: L('تنوع محصولات بادی استایل', 'The Body Style range'),
         text: L(
-          'مهم‌ترین خدماتی که ما را متمایز می‌کند.',
-          'The services that set us apart.',
+          'در بادی استایل تلاش شده تا تنوع محصولات پاسخگوی نیازهای مختلف باشد. این تنوع به شما کمک می‌کند متناسب با فضا، بودجه و هدف تمرینی خود بهترین انتخاب را داشته باشید.',
+          'Body Style’s range is built to meet different needs, so you can choose what fits your space, budget and training goals.',
         ),
         items: [
-          {
-            icon: 'shield-check',
-            title: L('تضمین کیفیت', 'Quality guarantee'),
-            text: L(
-              'همه محصولات با گارانتی معتبر و گواهی اصالت عرضه می‌شوند.',
-              'Every product ships with a valid warranty and certificate of origin.',
-            ),
-            href: '',
-          },
-          {
-            icon: 'truck',
-            title: L('تحویل سریع', 'Fast delivery'),
-            text: L(
-              'ارسال به سراسر کشور در کمتر از ۴۸ ساعت برای اقلام موجود.',
-              'Nationwide delivery in under 48 hours for in-stock items.',
-            ),
-            href: '',
-          },
-          {
-            icon: 'headset',
-            title: L('پشتیبانی فنی', 'Technical support'),
-            text: L(
-              'کارشناسان ما قبل و بعد از خرید پاسخگوی شما هستند.',
-              'Our engineers answer before and after the purchase.',
-            ),
-            href: '',
-          },
-          {
-            icon: 'wrench',
-            title: L('نصب و راه‌اندازی', 'Installation'),
-            text: L(
-              'نصب تخصصی در محل توسط تیم فنی مجرب.',
-              'On-site professional installation by our field team.',
-            ),
-            href: '',
-          },
-          {
-            icon: 'coins',
-            title: L('قیمت رقابتی', 'Competitive pricing'),
-            text: L(
-              'همکاری مستقیم با تولیدکنندگان برای بهترین قیمت.',
-              'Direct partnerships with manufacturers for the best price.',
-            ),
-            href: '',
-          },
-          {
-            icon: 'layers',
-            title: L('تنوع محصول', 'Wide range'),
-            text: L(
-              'بیش از ۵۰۰ قلم محصول در دسته‌بندی‌های مختلف.',
-              'Over 500 products across many categories.',
-            ),
-            href: '',
-          },
+          categoryCard('gym-machines', 'layers'),
+          categoryCard('weights', 'weight'),
+          categoryCard('gym-equipment', 'dumbbell'),
+          categoryCard('cardio', 'activity'),
         ],
       }),
       section('landing-highlights', 'catalogHighlights', {
-        heading: L('محصولات منتخب', 'Featured products'),
+        heading: L('دستگاه‌های منتخب', 'Featured machines'),
         text: L(
-          'پرفروش‌ترین‌ها و جدیدترین‌ها.',
-          'Best sellers and new arrivals.',
+          'تمامی دستگاه‌های بدنسازی بادی استایل با رعایت استانداردهای ایمنی و کیفیت تولید می‌شوند. استفاده از رنگ الکترواستاتیک، جوشکاری صنعتی و طراحی اصولی باعث افزایش طول عمر و عملکرد بهتر محصولات شده است.',
+          'Every Body Style machine is built to safety and quality standards. Electrostatic paint, industrial welding and sound design give the products a longer life and better performance.',
         ),
         typeSlug: 'products',
         mode: 'featured',
@@ -144,319 +121,360 @@ const PAGES: Record<
       section('landing-stats', 'stats', {
         items: [
           {
-            value: 20,
+            value: 100,
             suffix: '+',
-            label: L('سال تجربه', 'Years of experience'),
-            icon: 'calendar',
-          },
-          {
-            value: 1200,
-            suffix: '+',
-            label: L('پروژه انجام‌شده', 'Projects delivered'),
-            icon: 'briefcase',
-          },
-          {
-            value: 500,
-            suffix: '+',
-            label: L('محصول فعال', 'Active products'),
+            label: L('تعداد محصولات', 'Products'),
             icon: 'package',
           },
           {
-            value: 98,
-            suffix: '%',
-            label: L('رضایت مشتری', 'Customer satisfaction'),
-            icon: 'heart',
+            value: 250,
+            suffix: '+',
+            label: L('تعداد پروژه‌ها', 'Completed projects'),
+            icon: 'building-2',
+          },
+          {
+            value: 5,
+            suffix: '+',
+            label: L('پروژه‌های در حال انجام', 'Projects in progress'),
+            icon: 'hammer',
+          },
+          {
+            value: 24,
+            suffix: '',
+            label: L(
+              'ساعت پاسخگویی، هفت روز هفته',
+              'Hours a day, seven days a week, at your service',
+            ),
+            icon: 'headset',
           },
         ],
-      }),
-      section('landing-samples', 'samples', {
-        heading: L('نمونه کارها', 'Our work'),
-        text: L(
-          'گزیده‌ای از پروژه‌های اخیر.',
-          'A selection of recent projects.',
-        ),
-        items: [1, 2, 3, 4, 5, 6].map((i) => ({
-          image: `${P}/sample-${i}.svg`,
-          title: L(`پروژه شماره ${i}`, `Project ${i}`),
-          text: L(
-            'تأمین و نصب تجهیزات خط تولید.',
-            'Supply and installation of production-line equipment.',
-          ),
-          href: '',
-        })),
-      }),
-      section('landing-testimonials', 'testimonials', {
-        heading: L('مشتریان چه می‌گویند', 'What customers say'),
-        items: [
-          {
-            quote: L(
-              'تحویل به‌موقع و پشتیبانی عالی. دقیقاً همان چیزی که یک پروژه صنعتی نیاز دارد.',
-              'On-time delivery and excellent support. Exactly what an industrial project needs.',
-            ),
-            author: L('علی رضایی', 'Ali Rezaei'),
-            role: L('مدیر خرید، فولاد پارس', 'Procurement manager, Pars Steel'),
-            avatar: `${P}/avatar-1.svg`,
-          },
-          {
-            quote: L(
-              'کارشناسان فنی با حوصله بهترین گزینه را پیشنهاد دادند.',
-              'The engineers patiently recommended the best option for us.',
-            ),
-            author: L('مریم احمدی', 'Maryam Ahmadi'),
-            role: L('مدیر پروژه', 'Project manager'),
-            avatar: `${P}/avatar-2.svg`,
-          },
-          {
-            quote: L(
-              'سه سال است با این مجموعه کار می‌کنیم و هیچ‌وقت ناامید نشدیم.',
-              "We've worked with them for three years and were never let down.",
-            ),
-            author: L('حسین کریمی', 'Hossein Karimi'),
-            role: L('مدیرعامل', 'CEO'),
-            avatar: `${P}/avatar-3.svg`,
-          },
-        ],
-      }),
-      section('landing-partners', 'partners', {
-        heading: L('همکاران ما', 'Our partners'),
-        logos: [1, 2, 3, 4, 5, 6].map((i) => ({
-          image: `${P}/partner-${i}.svg`,
-          name: `Partner ${i}`,
-          href: '',
-        })),
       }),
       section('landing-faq', 'faq', {
         heading: L('سوالات متداول', 'Frequently asked questions'),
-        text: {},
+        text: L('', ''),
         items: [
           {
             question: L(
-              'زمان تحویل سفارش چقدر است؟',
-              'How long does delivery take?',
+              'آیا امکان خرید اقساطی دستگاه بدنسازی وجود دارد؟',
+              'Can I buy gym machines in instalments?',
             ),
             answer: L(
-              'اقلام موجود در انبار ظرف ۴۸ ساعت ارسال می‌شوند. اقلام سفارشی بین ۲ تا ۶ هفته زمان می‌برند.',
-              'In-stock items ship within 48 hours. Custom items take 2 to 6 weeks.',
-            ),
-          },
-          {
-            question: L('آیا نصب هم انجام می‌دهید؟', 'Do you also install?'),
-            answer: L(
-              'بله، تیم فنی ما نصب و راه‌اندازی را در محل انجام می‌دهد.',
-              'Yes, our field team handles installation and commissioning on site.',
+              'بله، شرایط اقساطی برای باشگاه‌داران فراهم می‌باشد.',
+              'Yes, instalment terms are available for gym owners.',
             ),
           },
           {
             question: L(
-              'گارانتی محصولات چگونه است؟',
-              'What warranty do products have?',
+              'گارانتی دستگاه‌های بدنسازی معمولاً چند سال است؟',
+              'How long is the warranty on gym machines?',
             ),
             answer: L(
-              'همه محصولات دارای گارانتی معتبر شرکت سازنده هستند.',
-              "All products carry the manufacturer's official warranty.",
-            ),
-          },
-          {
-            question: L('چطور قیمت بگیرم؟', 'How do I get a quote?'),
-            answer: L(
-              'از طریق فرم درخواست همین صفحه یا تماس تلفنی، ظرف یک روز کاری پاسخ می‌دهیم.',
-              'Use the request form on this page or call us. We reply within one business day.',
+              'بسته به برند و نوع دستگاه، گارانتی بین ۱ تا ۵ سال برای موتور (در دستگاه‌های کاردیو) و بین ۶ ماه تا ۲ سال برای قطعات مکانیکی ارائه می‌شود.',
+              'Depending on the brand and machine, the warranty is 1 to 5 years on the motor (for cardio machines) and 6 months to 2 years on mechanical parts.',
             ),
           },
           {
             question: L(
-              'آیا امکان بازدید حضوری هست؟',
-              'Can we visit in person?',
+              'چه نوع دستگاه‌های بدنسازی برای باشگاه مناسب هستند؟',
+              'Which machines does a gym need?',
             ),
             answer: L(
-              'بله، نمایشگاه ما در ساعات کاری پذیرای شماست.',
-              'Yes, our showroom is open during business hours.',
-            ),
-          },
-          {
-            question: L(
-              'سفارش عمده تخفیف دارد؟',
-              'Do bulk orders get a discount?',
-            ),
-            answer: L(
-              'برای سفارش‌های بالای ۵۰ قلم، قیمت ویژه اعلام می‌شود.',
-              'Orders above 50 units get special pricing.',
-            ),
-          },
-          {
-            question: L(
-              'روش‌های پرداخت چیست؟',
-              'What payment methods do you accept?',
-            ),
-            answer: L(
-              'انتقال بانکی و چک صیادی برای مشتریان حقوقی.',
-              'Bank transfer and certified cheques for corporate customers.',
-            ),
-          },
-          {
-            question: L('محصولات اصل هستند؟', 'Are the products genuine?'),
-            answer: L(
-              'همه اقلام مستقیماً از نمایندگی رسمی سازنده تأمین می‌شوند.',
-              'Every item is sourced directly from the manufacturer’s official distributor.',
+              'دستگاه‌های وزنه آزاد، دستگاه‌های سیم‌کش، کاردیو (تردمیل، دوچرخه ثابت، الپتیکال) و دستگاه‌های چندکاره بسته به فضای باشگاه و تعداد اعضا ضروری هستند.',
+              'Plate-loaded machines, cable machines, cardio (treadmills, exercise bikes, ellipticals) and multi-function machines, depending on the gym’s space and membership.',
             ),
           },
         ],
       }),
       section('landing-cta', 'ctaBanner', {
-        heading: L('پروژه‌ای در پیش دارید؟', 'Planning a project?'),
+        heading: L('مشاوره رایگان خرید', 'Free buying advice'),
         text: L(
-          'همین امروز با ما صحبت کنید تا بهترین راه‌حل را پیشنهاد دهیم.',
-          'Talk to us today and we will propose the best solution.',
+          'کارشناسان بادی استایل آماده ارائه مشاوره رایگان برای انتخاب بهترین دستگاه هستند. هفت روز هفته، ۲۴ ساعت شبانه‌روز پاسخگوی شما هستیم.',
+          'Body Style’s experts offer free advice on choosing the right machine. We answer you seven days a week, 24 hours a day.',
         ),
-        cta: { label: L('تماس با ما', 'Contact us'), href: '/contact' },
+        cta: { label: L('ارتباط با ما', 'Contact us'), href: '/contact' },
       }),
       section('landing-ticket', 'ticketForm', {
-        heading: L('درخواست مشاوره رایگان', 'Request a free consultation'),
+        heading: L('استعلام قیمت', 'Ask for a price'),
         text: L(
-          'شماره خود را بگذارید؛ کارشناسان ما با شما تماس می‌گیرند.',
-          'Leave your number and our specialists will call you back.',
+          'برای قیمت تماس بگیرید یا درخواست خود را ثبت کنید؛ بادی استایل امکان ارسال دستگاه‌های بدنسازی به تمام شهرهای ایران را فراهم کرده است.',
+          'Call us for a price or send a request. Body Style delivers gym machines to every city in Iran.',
         ),
       }),
     ],
   },
+  // Source: bodystyleco.com/درباره-ما. The page has no photos, so no section carries an image.
   about: {
     seo: {
       title: L('درباره ما', 'About us'),
       description: L(
-        'داستان، مأموریت و افتخارات ما',
-        'Our story, mission and achievements',
+        'شرکت بادی استایل به‌عنوان یکی از تولیدکنندگان معتبر تجهیزات ورزشی و بدنسازی در کشور، فعالیت خود را با هدف توسعه فناوری تولید داخلی و ارائه محصولات استاندارد',
+        'Body Style is a respected domestic manufacturer of sports and bodybuilding equipment, built to advance local production technology and deliver standard products.',
       ),
     },
     sections: [
       section('about-hero', 'aboutHero', {
-        image: `${P}/about-hero.svg`,
-        title: L('درباره ما', 'About us'),
+        image: '',
+        title: L('درباره شرکت بادی استایل', 'About Body Style'),
         subtitle: L(
-          'بیش از بیست سال در کنار صنعت ایران',
-          'More than twenty years alongside industry',
+          'هر آنچه باید در مورد ما بدانید',
+          'Everything you need to know about us',
         ),
       }),
       section('about-intro', 'intro', {
-        heading: L('داستان ما', 'Our story'),
-        body: L(
-          'پارس تجهیز در سال ۱۳۸۲ با هدف تأمین قطعات صنعتی با کیفیت آغاز به کار کرد. امروز با تیمی ۴۰ نفره، به صدها کارخانه و پیمانکار در سراسر کشور خدمت می‌کنیم.',
-          'Pars Equipment started in 2003 to supply quality industrial parts. Today, with a team of 40, we serve hundreds of factories and contractors across the country.',
+        heading: L(
+          'معرفی رسمی شرکت بادی استایل',
+          'The official introduction of Body Style',
         ),
-        image: `${P}/sample-2.svg`,
-        imagePosition: 'start',
+        body: L(
+          'شرکت بادی استایل به‌عنوان یکی از تولیدکنندگان معتبر تجهیزات ورزشی و بدنسازی در کشور، فعالیت خود را با هدف توسعه فناوری تولید داخلی و ارائه محصولات استاندارد در حوزه فیتنس آغاز کرده است. این شرکت با بهره‌گیری از ساختار تولیدی مجهز، نیروهای متخصص و فرآیندهای کنترل کیفیت دقیق، توانسته جایگاهی پایدار و حرفه‌ای در صنعت تجهیزات ورزشی ایران به دست آورد.',
+          'Body Style is a respected domestic manufacturer of sports and bodybuilding equipment. It started with the aim of advancing local production technology and delivering standard fitness products. With a well-equipped production line, specialist staff and precise quality-control processes, it has earned a lasting, professional position in Iran’s sports equipment industry.',
+        ),
+        image: '',
+        imagePosition: 'end',
       }),
-      section('about-mission', 'missionVision', {
-        mission: {
-          title: L('مأموریت ما', 'Our mission'),
-          text: L(
-            'ساده‌کردن تأمین تجهیزات صنعتی با کیفیت پایدار و خدمات قابل اتکا.',
-            'Make sourcing industrial equipment simple, with consistent quality and dependable service.',
-          ),
-        },
-        vision: {
-          title: L('چشم‌انداز ما', 'Our vision'),
-          text: L(
-            'تبدیل‌شدن به اولین انتخاب صنایع منطقه برای تأمین و خدمات فنی.',
-            "To be the region's first choice for supply and technical services.",
-          ),
-        },
-        image: `${P}/mission.svg`,
-      }),
-      section('about-achievements', 'achievements', {
-        heading: L('افتخارات و گواهینامه‌ها', 'Achievements and certificates'),
-        text: {},
+      section('about-scope', 'features', {
+        eyebrow: L('', ''),
+        heading: L('حوزه فعالیت و تخصص', 'Scope and expertise'),
+        text: L(
+          'شرکت بادی استایل در زمینه طراحی، مهندسی و تولید تجهیزات بدنسازی شامل موارد زیر فعالیت می‌کند:',
+          'Body Style designs, engineers and manufactures bodybuilding equipment, including:',
+        ),
         items: [
           {
-            title: L('ISO 9001:2015', 'ISO 9001:2015'),
-            text: L(
-              'گواهی سیستم مدیریت کیفیت',
-              'Quality management certification',
+            icon: 'dumbbell',
+            title: L(
+              'دستگاه‌های قدرتی و مقاومتی',
+              'Strength and resistance machines',
             ),
-            year: 2018,
-            image: `${P}/certificate-1.svg`,
-            icon: '',
+            text: L('', ''),
+            href: '',
           },
           {
-            title: L('تأمین‌کننده برتر سال', 'Supplier of the year'),
-            text: L(
-              'انتخاب‌شده توسط انجمن صنایع فلزی',
-              'Selected by the Metal Industries Association',
-            ),
-            year: 2022,
-            image: '',
-            icon: 'trophy',
+            icon: 'activity',
+            title: L('تجهیزات هوازی', 'Aerobic equipment'),
+            text: L('', ''),
+            href: '',
           },
           {
-            title: L('عضو اتاق بازرگانی', 'Chamber of commerce member'),
-            text: L('عضویت رسمی از سال ۱۳۸۵', 'Official member since 2006'),
-            year: 2006,
-            image: '',
-            icon: 'badge-check',
+            icon: 'weight',
+            title: L(
+              'وزنه‌های آزاد، هالتر و دیسک',
+              'Free weights, barbells and discs',
+            ),
+            text: L('', ''),
+            href: '',
+          },
+          {
+            icon: 'zap',
+            title: L(
+              'تجهیزات کراس‌فیت و فانکشنال',
+              'CrossFit and functional equipment',
+            ),
+            text: L('', ''),
+            href: '',
+          },
+          {
+            icon: 'building-2',
+            title: L('ملزومات تخصصی باشگاهی', 'Specialist gym supplies'),
+            text: L('', ''),
+            href: '',
           },
         ],
       }),
-      section('about-cta', 'ctaBanner', {
-        heading: L('با ما همکاری کنید', 'Work with us'),
+      section('about-quality', 'achievements', {
+        heading: L('چارچوب کیفیت و استانداردها', 'Quality and standards'),
         text: L(
-          'برای شروع همکاری همین امروز تماس بگیرید.',
-          'Get in touch today to start working together.',
+          'بادی استایل ضمن توسعه فناوری تولید، رعایت اصول مهندسی و استفاده از مواد اولیه استاندارد، بخشی از محصولات خود را تحت استانداردهای بین‌المللی از جمله ISO 9001 و CE اروپا تولید می‌کند.',
+          'Alongside advancing production technology, applying engineering principles and using standard raw materials, Body Style makes part of its products under international standards including ISO 9001 and European CE.',
+        ),
+        items: [
+          {
+            title: L('استاندارد ISO 9001', 'ISO 9001 standard'),
+            text: L('', ''),
+            year: null,
+            image: '',
+            icon: 'badge-check',
+          },
+          {
+            title: L('استاندارد CE اروپا', 'European CE standard'),
+            text: L('', ''),
+            year: null,
+            image: '',
+            icon: 'shield-check',
+          },
+          {
+            title: L('تست‌های دوام', 'Durability tests'),
+            text: L('', ''),
+            year: null,
+            image: '',
+            icon: 'gauge',
+          },
+          {
+            title: L('کنترل کیفی چندمرحله‌ای', 'Multi-stage quality control'),
+            text: L('', ''),
+            year: null,
+            image: '',
+            icon: 'layers',
+          },
+          {
+            title: L('سیستم‌های تولید پیشرفته', 'Advanced production systems'),
+            text: L('', ''),
+            year: null,
+            image: '',
+            icon: 'settings',
+          },
+        ],
+      }),
+      section('about-advantages', 'features', {
+        eyebrow: L('', ''),
+        heading: L('مزیت‌های رقابتی', 'Competitive advantages'),
+        text: L('', ''),
+        items: [
+          {
+            icon: 'factory',
+            title: L('توانمندی تولید داخلی', 'Domestic production capability'),
+            text: L(
+              'با امکان سفارشی‌سازی تجهیزات براساس نیاز پروژه',
+              'With equipment customised to the needs of each project',
+            ),
+            href: '',
+          },
+          {
+            icon: 'shield-check',
+            title: L('تضمین کیفیت ساخت', 'Guaranteed build quality'),
+            text: L(
+              'مبتنی بر فرایندهای تولید صنعتی و نظارت کارشناسی',
+              'Based on industrial production processes and expert supervision',
+            ),
+            href: '',
+          },
+          {
+            icon: 'layout-grid',
+            title: L('تنوع محصول', 'Product variety'),
+            text: L(
+              'در سطوح حرفه‌ای و باشگاهی',
+              'At professional and gym levels',
+            ),
+            href: '',
+          },
+          {
+            icon: 'wrench',
+            title: L(
+              'خدمات پس از فروش گسترده',
+              'Extensive after-sales service',
+            ),
+            text: L(
+              'شامل گارانتی، تامین قطعات و پشتیبانی فنی',
+              'Including warranty, spare parts and technical support',
+            ),
+            href: '',
+          },
+          {
+            icon: 'tag',
+            title: L('فروش مستقیم از کارخانه', 'Direct factory sales'),
+            text: L(
+              'و ارائه قیمت رقابتی در مقایسه با محصولات وارداتی',
+              'With prices competitive against imported products',
+            ),
+            href: '',
+          },
+        ],
+      }),
+      section('about-mission', 'missionVision', {
+        mission: {
+          title: L('مأموریت سازمان', 'Our mission'),
+          text: L(
+            'تأمین و تولید تجهیزات بدنسازی استاندارد، ایمن و با دوام، با هدف بهبود کیفیت ارائه خدمات باشگاهی، حمایت از ورزش حرفه‌ای و ارتقای فرهنگ ورزش در جامعه.',
+            'Supplying and manufacturing standard, safe and durable bodybuilding equipment, to improve the quality of gym services, support professional sport and raise sport culture in society.',
+          ),
+        },
+        vision: {
+          title: L('چشم‌انداز سازمانی', 'Our vision'),
+          text: L(
+            'شرکت بادی استایل با هدف ارتقای جایگاه صنعتی در سطح ملی و گسترش حضور در بازارهای منطقه‌ای، توسعه سبد محصولات و حرکت به سمت استانداردهای نوین تولید را در برنامه راهبردی خود قرار داده است. این مجموعه خود را متعهد به ارتقای کیفیت، نوآوری پایدار و افزایش سطح ایمنی تجهیزات ورزشی کشور می‌داند.',
+            'To raise its industrial standing nationally and grow in regional markets, Body Style has made widening its product range and moving toward modern production standards part of its strategic plan. It is committed to higher quality, lasting innovation and safer sports equipment across the country.',
+          ),
+        },
+        image: '',
+      }),
+      section('about-cta', 'ctaBanner', {
+        heading: L('تماس با ما', 'Contact us'),
+        text: L(
+          'هفت روز هفته، ۲۴ ساعت شبانه‌روز پاسخگوی شما هستیم',
+          'We answer you seven days a week, 24 hours a day',
         ),
         cta: { label: L('تماس با ما', 'Contact us'), href: '/contact' },
       }),
     ],
   },
+  // Source: bodystyleco.com/تماس-با-ما. Phones, email, address and hours live in site settings
+  // (contactWays) and feed both the contact cards and the footer.
   contact: {
     seo: {
       title: L('تماس با ما', 'Contact us'),
-      description: L('راه‌های ارتباط با ما', 'Ways to reach us'),
+      description: L(
+        'برای دریافت مشاوره خرید، پشتیبانی، یا همکاری با بادی استایل از طریق شماره تماس، آدرس و فرم تماس با ما اقدام کنید.',
+        'For purchase advice, support or to work with Body Style, reach us by phone, at our address or through the contact form.',
+      ),
     },
     sections: [
       section('contact-hero', 'contactHero', {
-        image: `${P}/contact-hero.svg`,
+        image: '',
         title: L('تماس با ما', 'Contact us'),
         text: L(
-          'سوالی دارید یا برای پروژه‌تان مشاوره می‌خواهید؟ از هر راهی که راحت‌ترید با ما در ارتباط باشید.',
-          'Have a question or need advice on your project? Reach us whichever way suits you.',
+          'هفت روز هفته، ۲۴ ساعت شبانه‌روز پاسخگوی شما هستیم',
+          'We answer you seven days a week, 24 hours a day',
         ),
       }),
       section('contact-info', 'contactInfo', {
-        heading: L('راه‌های ارتباطی', 'How to reach us'),
-        text: L(
-          'در ساعات کاری پاسخگوی شما هستیم.',
-          'We answer during business hours.',
-        ),
+        heading: L('شبکه‌های ارتباطی', 'Ways to reach us'),
+        text: L('', ''),
       }),
       section('contact-ticket', 'ticketForm', {
-        heading: L('ثبت درخواست', 'Send a request'),
-        text: L(
-          'فرم را پر کنید تا در اولین فرصت با شما تماس بگیریم.',
-          'Fill in the form and we will call you back as soon as possible.',
-        ),
+        heading: L('فرم تماس با ما', 'Contact form'),
+        text: L('', ''),
       }),
       section('contact-map', 'map', {
-        embedUrl: '',
-        address: L('تهران، خیابان ولیعصر، پلاک ۱۲۳', '123 Valiasr St., Tehran'),
+        embedUrl:
+          'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d36659.8134942226!2d50.93311434969135!3d35.69422610775087!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8d97a23ad3601b%3A0x2764ad42658f6f3f!2z2LTYsdqp2Kog2KjYp9iv24wg2KfYs9iq2KfbjNmE!5e0!3m2!1sfa!2s!4v1579642743718!5m2!1sfa!2s',
+        address: L(
+          'استان تهران، شهرستان ملارد، ابتدای صفادشت، خیابان آبشار، خیابان بنفشه چهارم غربی، اولین چهارراه سمت چپ',
+          'Safadasht, Malard County, Tehran Province — Abshar St., West Banafsheh 4th St., first intersection on the left',
+        ),
       }),
     ],
   },
   catalog: {
     seo: {
-      title: L('محصولات و خدمات', 'Products and services'),
-      description: L('فهرست محصولات و خدمات ما', 'Our products and services'),
+      title: L('محصولات', 'Products'),
+      description: L(
+        'کلیه محصولات بادی استایل: دستگاه بدنسازی وزنه آزاد و سیم‌کش، میز و نیمکت، وزنه، تجهیزات بدنسازی، تردمیل و دوچرخه.',
+        'All Body Style products: plate-loaded and cable machines, benches, weights, gym equipment, treadmills and bikes.',
+      ),
     },
     sections: [],
   },
 };
 
-/** Creates every page with its sections. A page that already has sections is left untouched. */
+/**
+ * Creates every page with its sections. A page that already has content is left untouched,
+ * unless it still carries MISSING placeholders from an earlier seed: that page was never
+ * finished in the panel, so it is replaced with the current copy.
+ */
 export const seedPages = async (): Promise<void> => {
   for (const [key, def] of Object.entries(PAGES) as [
     PageKey,
     (typeof PAGES)[PageKey],
   ][]) {
     const existing = await Page.findOne({ key });
+    const unfinished =
+      existing &&
+      JSON.stringify(existing.toObject({ flattenMaps: true })).includes(
+        MISSING,
+      );
     if (
       existing &&
+      !unfinished &&
       (existing.sections.length > 0 || existing.seo.title.size > 0)
     ) {
       console.log(`ℹ️  Page "${key}" already seeded — skipping.`);
@@ -493,6 +511,8 @@ export const seedPages = async (): Promise<void> => {
       },
       { upsert: true, new: true, setDefaultsOnInsert: true },
     );
-    console.log(`✅ Seeded page "${key}" with ${sections.length} sections`);
+    console.log(
+      `✅ ${unfinished ? 'Replaced unfinished' : 'Seeded'} page "${key}" with ${sections.length} sections`,
+    );
   }
 };

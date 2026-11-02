@@ -35,13 +35,28 @@
   --gray-900: #18181b;
   --gray-950: #09090b;
 
-  /* Brand ramp. Grayscale for the boilerplate; swap for the client's hue. */
-  --brand-100: var(--gray-100);
-  --brand-200: var(--gray-200);
-  --brand-500: var(--gray-900);
-  --brand-600: var(--gray-800);
-  --brand-700: var(--gray-700);
-  --brand-ink: var(--gray-0);
+  /* Body Style palette, taken from the logo: deep logo navy #202e88 and logo orange
+     #fc9824, grounded by gunmetal ink. Navy is the brand fill (white text on top);
+     orange is the warm accent and the brand fill on dark surfaces. */
+  --blue-50: #f4f6fd;
+  --blue-100: #e5e9f9;
+  --blue-200: #c5cdee;
+  /* Light blue for text and icons on dark surfaces: 7:1 on gunmetal. */
+  --blue-300: #93a0ea;
+  /* Lifted navy for fills and focus rings where plain navy would sink (dark mode). */
+  --blue-400: #5565d4;
+  /* Logo navy: 11:1 on white, so it works as fill and as text. */
+  --blue-500: #202e88;
+  --blue-600: #18236b;
+  --orange-100: #fff0dc;
+  --orange-300: #ffbf66;
+  /* Logo orange. For fills; never body text on white. */
+  --orange-400: #fc9824;
+  /* Text-safe orange: 5.3:1 on white. */
+  --orange-700: #a85500;
+  --gunmetal-500: #5b6366;
+  --gunmetal-700: #313638;
+  --gunmetal-900: #1f2325;
 
   --green-500: #16a34a;
   --green-100: #dcfce7;
@@ -61,8 +76,8 @@
   --color-surface-sunken: var(--gray-150);
 
   /* Text */
-  --color-ink: var(--gray-950);
-  --color-ink-muted: var(--gray-600);
+  --color-ink: var(--gunmetal-900);
+  --color-ink-muted: var(--gunmetal-500);
   --color-ink-subtle: var(--gray-400);
   --color-ink-inverse: var(--gray-0);
 
@@ -71,12 +86,20 @@
   --color-line-strong: var(--gray-300);
 
   /* Brand */
-  --color-brand: var(--brand-500);
-  --color-brand-hover: var(--brand-600);
-  --color-brand-active: var(--brand-700);
-  --color-brand-soft: var(--brand-100);
-  --color-brand-ink: var(--brand-ink);
-  --color-ring: var(--brand-500);
+  /* brand = fills (buttons, chips, logo) with brand-ink on top;
+     brand-strong = brand-coloured text and icons on light surfaces. */
+  --color-brand: var(--blue-500);
+  --color-brand-hover: var(--blue-600);
+  --color-brand-active: var(--blue-600);
+  --color-brand-soft: var(--blue-100);
+  --color-brand-ink: var(--gray-0);
+  --color-brand-strong: var(--blue-500);
+  --color-ring: var(--blue-400);
+  /* accent = warm text/lines; highlight + sun = decorative fills only. */
+  --color-accent: var(--orange-700);
+  --color-accent-soft: var(--orange-100);
+  --color-highlight: var(--orange-400);
+  --color-sun: var(--orange-300);
 
   /* Status */
   --color-success: var(--green-500);
@@ -161,12 +184,14 @@
   --color-ink-inverse: var(--gray-950);
   --color-line: var(--gray-800);
   --color-line-strong: var(--gray-700);
-  --color-brand: var(--gray-50);
-  --color-brand-hover: var(--gray-200);
-  --color-brand-active: var(--gray-300);
-  --color-brand-soft: var(--gray-850);
-  --color-brand-ink: var(--gray-950);
-  --color-ring: var(--gray-50);
+  --color-brand: var(--blue-400);
+  --color-brand-hover: #6877e0;
+  --color-brand-active: #6877e0;
+  --color-brand-soft: color-mix(in oklab, var(--blue-400) 18%, transparent);
+  --color-brand-strong: var(--blue-300);
+  --color-ring: var(--blue-300);
+  --color-accent: var(--orange-400);
+  --color-accent-soft: color-mix(in oklab, var(--orange-400) 16%, transparent);
   --color-success-soft: color-mix(in oklab, var(--green-500) 18%, transparent);
   --color-warning-soft: color-mix(in oklab, var(--amber-500) 18%, transparent);
   --color-danger-soft: color-mix(in oklab, var(--red-500) 18%, transparent);
@@ -196,14 +221,14 @@ html[lang='en'] {
   --color-base-content: var(--color-ink);
   --color-primary: var(--color-brand);
   --color-primary-content: var(--color-brand-ink);
-  --color-secondary: var(--color-ink-muted);
-  --color-secondary-content: var(--color-ink-inverse);
-  --color-accent: var(--color-brand);
-  --color-accent-content: var(--color-brand-ink);
+  --color-secondary: var(--orange-400);
+  --color-secondary-content: var(--gunmetal-900);
+  --color-accent: var(--orange-700);
+  --color-accent-content: #ffffff;
   --color-neutral: var(--color-ink);
   --color-neutral-content: var(--color-ink-inverse);
-  --color-info: var(--color-ink-muted);
-  --color-info-content: var(--color-ink-inverse);
+  --color-info: var(--blue-500);
+  --color-info-content: #ffffff;
   --color-success: var(--color-success);
   --color-success-content: #ffffff;
   --color-warning: var(--color-warning);
@@ -231,14 +256,14 @@ html[lang='en'] {
   --color-base-content: var(--color-ink);
   --color-primary: var(--color-brand);
   --color-primary-content: var(--color-brand-ink);
-  --color-secondary: var(--color-ink-muted);
-  --color-secondary-content: var(--color-ink-inverse);
-  --color-accent: var(--color-brand);
-  --color-accent-content: var(--color-brand-ink);
+  --color-secondary: var(--orange-400);
+  --color-secondary-content: var(--gunmetal-900);
+  --color-accent: var(--orange-400);
+  --color-accent-content: var(--gunmetal-900);
   --color-neutral: var(--color-ink);
   --color-neutral-content: var(--color-ink-inverse);
-  --color-info: var(--color-ink-muted);
-  --color-info-content: var(--color-ink-inverse);
+  --color-info: var(--blue-300);
+  --color-info-content: var(--gunmetal-900);
   --color-success: var(--color-success);
   --color-success-content: #ffffff;
   --color-warning: var(--color-warning);
@@ -300,6 +325,111 @@ html[lang='en'] {
 
 /* 5. UTILITIES -------------------------------------------------------------- */
 
+/*
+ * The public site is always light and sunny, whatever the admin's light/dark
+ * preference: scoping these tokens keeps that toggle working in the panel.
+ */
+.public-site {
+  /* Cool white surfaces, gunmetal type, logo-navy fills, logo-orange warmth. */
+  --color-canvas: #fdfdff;
+  --color-canvas-subtle: var(--blue-50);
+  --color-surface: #ffffff;
+  --color-surface-raised: var(--blue-50);
+  --color-surface-sunken: #eceffa;
+  --color-ink: var(--gunmetal-900);
+  --color-ink-muted: var(--gunmetal-500);
+  --color-ink-subtle: #8b9396;
+  --color-ink-inverse: #ffffff;
+  --color-line: #dde2f4;
+  --color-line-strong: #bcc5e6;
+  --color-brand: var(--blue-500);
+  --color-brand-hover: var(--blue-600);
+  --color-brand-active: var(--blue-600);
+  --color-brand-soft: var(--blue-100);
+  --color-brand-ink: #ffffff;
+  --color-brand-strong: var(--blue-500);
+  --color-accent: var(--orange-700);
+  --color-accent-soft: var(--orange-100);
+  --color-ring: var(--blue-400);
+  --shadow-xs: 0 1px 2px rgb(32 46 136 / 0.06);
+  --shadow-sm: 0 6px 18px -6px rgb(32 46 136 / 0.16);
+  --shadow-md: 0 14px 32px -10px rgb(32 46 136 / 0.2);
+  --shadow-lg: 0 26px 56px -18px rgb(32 46 136 / 0.28);
+  --shadow-glow: 0 0 0 4px rgb(85 101 212 / 0.28);
+  color-scheme: light;
+  min-height: 100dvh;
+  color: var(--color-ink);
+  background:
+    radial-gradient(circle at 8% 10%, rgb(85 101 212 / 0.12), transparent 28rem),
+    radial-gradient(circle at 94% 6%, rgb(252 152 36 / 0.14), transparent 26rem),
+    radial-gradient(circle at 70% 96%, rgb(252 152 36 / 0.07), transparent 30rem),
+    var(--color-canvas);
+  position: relative;
+  isolation: isolate;
+}
+
+/*
+ * Photo overlays and the gunmetal banner stay dark: flip the text tokens back
+ * to light values inside them so ghost CTAs, eyebrows and hovers stay legible.
+ */
+.on-dark {
+  --color-ink: #ffffff;
+  --color-ink-muted: rgb(255 255 255 / 0.78);
+  --color-ink-subtle: rgb(255 255 255 / 0.55);
+  --color-line: rgb(255 255 255 / 0.14);
+  --color-line-strong: rgb(255 255 255 / 0.26);
+  --color-surface: rgb(255 255 255 / 0.06);
+  --color-surface-raised: rgb(255 255 255 / 0.12);
+  /* Navy sinks on dark photos and banners: orange becomes the brand fill there. */
+  --color-brand: var(--orange-400);
+  --color-brand-hover: var(--orange-300);
+  --color-brand-active: var(--orange-300);
+  --color-brand-ink: var(--gunmetal-900);
+  --color-brand-strong: var(--orange-400);
+  --color-accent: var(--orange-300);
+  --color-ring: var(--orange-400);
+}
+
+.public-site::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+}
+
+.public-site main {
+  overflow: clip;
+}
+
+.public-site h1,
+.public-site h2,
+.public-site h3,
+.public-site h4 {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+html[lang='en'] .public-site h1,
+html[lang='en'] .public-site h2,
+html[lang='en'] .public-site h3 {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', var(--font-inter), sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 0.94;
+  text-transform: uppercase;
+}
+
+.public-site section {
+  scroll-margin-top: 5rem;
+}
+
+.public-site :is(a, button, summary) {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Containers: content (text-heavy), wide (grids), tv (huge screens still get a max). */
 @utility container-content {
   width: 100%;
@@ -334,13 +464,13 @@ html[lang='en'] {
 /* Background patterns (pure CSS, theme-aware, no image requests) */
 @utility bg-pattern-dots {
   background-image: radial-gradient(var(--color-line-strong) 1px, transparent 1px);
-  background-size: 22px 22px;
+  background-size: 20px 20px;
 }
 @utility bg-pattern-grid {
   background-image:
     linear-gradient(var(--color-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
-  background-size: 48px 48px;
+  background-size: 54px 54px;
 }
 @utility bg-gradient-subtle {
   background-image:
@@ -348,7 +478,10 @@ html[lang='en'] {
     linear-gradient(180deg, var(--color-canvas-subtle), var(--color-canvas));
 }
 @utility bg-gradient-ink {
-  background-image: linear-gradient(135deg, var(--gray-900), var(--gray-800));
+  background-image:
+    radial-gradient(circle at 85% 15%, rgb(85 101 212 / 0.42), transparent 38%),
+    radial-gradient(circle at 10% 90%, rgb(252 152 36 / 0.24), transparent 32%),
+    linear-gradient(135deg, #243294, #101748);
 }
 @utility mask-fade-edges {
   mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 45%, transparent 100%);
@@ -364,9 +497,9 @@ html[lang='en'] {
     box-shadow var(--duration-base) var(--ease-out-expo),
     border-color var(--duration-base) var(--ease-out-expo);
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-7px);
     box-shadow: var(--shadow-lg);
-    border-color: var(--color-line-strong);
+    border-color: color-mix(in oklab, var(--color-brand) 58%, var(--color-line-strong));
   }
 }
 @utility icon-hover {
@@ -377,7 +510,7 @@ html[lang='en'] {
     box-shadow var(--duration-base) var(--ease-out-expo);
   &:hover {
     transform: translateY(-2px) scale(1.06);
-    color: var(--color-brand);
+    color: var(--color-brand-strong);
     box-shadow: var(--shadow-glow);
   }
 }
@@ -387,10 +520,10 @@ html[lang='en'] {
   justify-content: center;
   width: 3rem;
   height: 3rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xs);
   background: var(--color-brand-soft);
-  color: var(--color-ink);
-  border: 1px solid var(--color-line);
+  color: var(--color-accent);
+  border: 1px solid color-mix(in oklab, var(--color-accent) 40%, var(--color-line));
 }
 @utility link-underline {
   position: relative;
@@ -448,4 +581,500 @@ html[lang='en'] {
 }
 .custom-error-message {
   @apply text-danger text-caption font-medium;
+}
+
+@keyframes brand-scan {
+  from {
+    transform: translateX(-140%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(420%) skewX(-18deg);
+  }
+}
+
+@keyframes brand-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@utility brand-scan {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    inset-block: -50%;
+    left: -25%;
+    z-index: -1;
+    width: 18%;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.32), transparent);
+    transform: skewX(-18deg);
+  }
+  &:hover::after {
+    animation: brand-scan 700ms var(--ease-out-expo);
+  }
+}
+
+@utility kinetic-arrow {
+  & svg {
+    transition: transform var(--duration-base) var(--ease-out-expo);
+  }
+  &:hover svg {
+    transform: translateX(0.3rem);
+  }
+  [dir='rtl'] &:hover svg {
+    transform: translateX(-0.3rem) scaleX(-1);
+  }
+}
+
+/* Animated equipment illustration in the public hero. */
+.hero-machines {
+  position: absolute;
+  inset-block: 11% 8%;
+  inset-inline-end: clamp(1rem, 4vw, 5rem);
+  z-index: 1;
+  width: min(48vw, 48rem);
+  pointer-events: none;
+  filter: saturate(1.08);
+  /* Purely decorative line art: the lifted navy and logo orange read on a light ground. */
+  --color-brand: var(--blue-400);
+  --color-accent: var(--orange-400);
+}
+
+.hero-machines__halo {
+  position: absolute;
+  inset: 9% 3% 4%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 45% 58%, rgb(252 152 36 / 0.26), transparent 36%),
+    radial-gradient(circle at 52% 47%, rgb(85 101 212 / 0.2), transparent 60%);
+  filter: blur(24px);
+  animation: hero-halo 4.8s ease-in-out infinite;
+}
+
+.hero-machines__orbit {
+  position: absolute;
+  border: 1px solid rgb(85 101 212 / 0.3);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+}
+
+.hero-machines__orbit::after {
+  content: '';
+  position: absolute;
+  top: 48%;
+  left: -4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 14px 3px rgb(252 152 36 / 0.55);
+}
+
+.hero-machines__orbit--one {
+  inset: 7% 8% 5% 4%;
+  animation: hero-orbit 18s linear infinite;
+}
+
+.hero-machines__orbit--two {
+  inset: 18% 20% 16% 15%;
+  border-color: rgb(252 152 36 / 0.4);
+  animation: hero-orbit 13s linear infinite reverse;
+}
+
+.hero-machines__orbit--two::after {
+  background: var(--color-brand);
+  box-shadow: 0 0 14px 3px rgb(85 101 212 / 0.5);
+}
+
+.hero-machines__platform {
+  position: absolute;
+  inset-inline: 8% 5%;
+  bottom: 1%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent) 15%,
+    var(--color-brand) 70%,
+    transparent
+  );
+  box-shadow:
+    0 0 18px rgb(252 152 36 / 0.45),
+    0 0 36px rgb(85 101 212 / 0.35);
+}
+
+.hero-machine {
+  position: absolute;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hero-machine path,
+.hero-machine circle {
+  vector-effect: non-scaling-stroke;
+}
+
+.hero-machine__glow {
+  filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 13px currentColor);
+}
+
+.hero-machine__surface {
+  fill: color-mix(in oklab, currentColor 11%, transparent);
+}
+
+.hero-machine__detail {
+  opacity: 0.45;
+}
+
+.hero-machine__joint {
+  fill: var(--color-canvas);
+  stroke-width: 5;
+}
+
+.hero-machine__pin {
+  fill: var(--color-brand);
+  stroke: none;
+  filter: drop-shadow(0 0 5px var(--color-brand));
+}
+
+.hero-machine--extension {
+  bottom: 0;
+  left: 8%;
+  width: 65%;
+  color: var(--color-brand);
+  animation: hero-machine-float 5s ease-in-out infinite;
+}
+
+.hero-machine--press {
+  top: 5%;
+  right: -1%;
+  width: 41%;
+  color: var(--color-accent);
+  opacity: 0.82;
+  animation: hero-machine-float 5.8s 0.7s ease-in-out infinite reverse;
+}
+
+.hero-machine--cable {
+  top: 1%;
+  left: -1%;
+  width: 30%;
+  color: var(--color-accent);
+  opacity: 0.68;
+  animation: hero-machine-float 6.2s 1.2s ease-in-out infinite;
+}
+
+.hero-machine__leg-arm {
+  transform-box: view-box;
+  transform-origin: 175px 239px;
+  animation: hero-leg-extension 2.6s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+.hero-machine__press-bar {
+  animation: hero-press-bar 2.25s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+.hero-machine__weight-stack {
+  animation: hero-weight-stack 2.8s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+.hero-machine__handle {
+  transform-box: view-box;
+  transform-origin: 187px 157px;
+  animation: hero-cable-handle 2.8s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+.hero-machine__cable-line {
+  stroke-dasharray: 4 8;
+  animation: hero-cable-flow 0.9s linear infinite;
+}
+
+.hero-machine__pulse {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hero-joint-pulse 2.6s ease-out infinite;
+}
+
+.hero-machines__spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-brand);
+  box-shadow: 0 0 12px 4px rgb(85 101 212 / 0.5);
+  animation: hero-spark 3s ease-in-out infinite;
+}
+
+.hero-machines__spark--one {
+  top: 17%;
+  left: 37%;
+}
+
+.hero-machines__spark--two {
+  top: 50%;
+  right: 4%;
+  background: var(--color-accent);
+  box-shadow: 0 0 12px 4px rgb(252 152 36 / 0.5);
+  animation-delay: 0.8s;
+}
+
+.hero-machines__spark--three {
+  bottom: 20%;
+  left: 4%;
+  animation-delay: 1.6s;
+}
+
+.hero-machines__readout {
+  position: absolute;
+  right: 5%;
+  bottom: 2.5%;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid rgb(32 46 136 / 0.25);
+  color: var(--blue-500);
+  background: rgb(255 255 255 / 0.85);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  box-shadow: 0 0 18px rgb(32 46 136 / 0.12);
+}
+
+@keyframes hero-leg-extension {
+  0%,
+  12%,
+  100% {
+    transform: rotate(5deg);
+  }
+  48%,
+  62% {
+    transform: rotate(28deg);
+  }
+}
+
+@keyframes hero-press-bar {
+  0%,
+  15%,
+  100% {
+    transform: translateY(0);
+  }
+  48%,
+  65% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes hero-weight-stack {
+  0%,
+  14%,
+  100% {
+    transform: translateY(0);
+  }
+  48%,
+  62% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes hero-cable-handle {
+  0%,
+  14%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  48%,
+  62% {
+    transform: translateY(13px) rotate(-4deg);
+  }
+}
+
+@keyframes hero-cable-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+@keyframes hero-joint-pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.75);
+  }
+  75%,
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes hero-machine-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+@keyframes hero-halo {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes hero-orbit {
+  to {
+    transform: rotate(348deg);
+  }
+}
+
+@keyframes hero-spark {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+/* Entrance + ambient motion for the image-free about and contact heroes. */
+.hero-rise {
+  animation: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--hero-delay, 0s);
+}
+
+.hero-rule-x {
+  transform-origin: left center;
+  animation: hero-rule-grow 0.9s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.page-hero__rule {
+  transform-origin: left center;
+  animation:
+    hero-rise 0.9s var(--hero-delay, 0s) cubic-bezier(0.16, 1, 0.3, 1) both,
+    hero-rule-grow 1.4s 0.55s cubic-bezier(0.16, 1, 0.3, 1) both,
+    hero-rule-glow 3.2s 2s ease-in-out infinite;
+}
+
+[dir='rtl'] .hero-rule-x,
+[dir='rtl'] .page-hero__rule {
+  transform-origin: right center;
+}
+
+.page-hero__slash {
+  --slash-from: 120%;
+  animation:
+    hero-slash-in 1.1s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both,
+    hero-slash-pulse 4.5s 1.4s ease-in-out infinite;
+}
+
+[dir='rtl'] .page-hero__slash {
+  --slash-from: -120%;
+}
+
+.page-hero .hero-machines {
+  animation: hero-machines-in 1.4s 0.25s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.hero-tape {
+  background-size: 58px 100%;
+  animation: hero-tape 2.4s linear infinite;
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@keyframes hero-rule-grow {
+  from {
+    scale: 0 1;
+  }
+}
+
+@keyframes hero-rule-glow {
+  0%,
+  100% {
+    filter: none;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px color-mix(in oklab, var(--color-brand) 70%, transparent));
+  }
+}
+
+@keyframes hero-slash-in {
+  from {
+    opacity: 0;
+    translate: var(--slash-from) 0;
+  }
+}
+
+@keyframes hero-slash-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 40px color-mix(in oklab, var(--color-brand) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 64px color-mix(in oklab, var(--color-brand) 80%, transparent);
+  }
+}
+
+@keyframes hero-machines-in {
+  from {
+    opacity: 0;
+    translate: 3rem 0;
+  }
+}
+
+@keyframes hero-tape {
+  to {
+    background-position-x: -58px;
+  }
+}
+
+@media (max-width: 63.999rem) {
+  .hero-machines {
+    inset-block: 18% 7%;
+    inset-inline-end: -13%;
+    width: min(68vw, 38rem);
+    opacity: 0.34;
+    filter: saturate(1.08) blur(0.3px);
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .hero-machines {
+    inset-block: 32% 7%;
+    inset-inline-end: -34%;
+    width: 31rem;
+    opacity: 0.2;
+  }
+
+  .hero-machine--press,
+  .hero-machine--cable,
+  .hero-machines__readout {
+    display: none;
+  }
 }
