@@ -184,6 +184,30 @@ const SiteFooter = async ({ site, locale }: SiteFooterProps) => {
           <span className="max-w-2xl lg:text-end">{t('legalNotice')}</span>
         </Container>
       </div>
+
+      <div className="border-t border-line/60 bg-canvas/80">
+        <Container size="wide" className="flex justify-center py-3 text-caption text-ink-subtle">
+          <p className="flex items-center gap-2">
+            <span aria-hidden className="h-px w-6 bg-gradient-to-r from-transparent to-accent" />
+            <span>
+              {t.rich('developedBy', {
+                link: (chunks) => (
+                  <a
+                    href="https://vervedevlab.ir/"
+                    target="_blank"
+                    rel="noopener"
+                    title={t('developerTitle')}
+                    className="font-bold text-ink-muted hover:text-brand-strong link-underline"
+                  >
+                    {chunks}
+                  </a>
+                ),
+              })}
+            </span>
+            <span aria-hidden className="h-px w-6 bg-gradient-to-l from-transparent to-accent" />
+          </p>
+        </Container>
+      </div>
     </footer>
   );
 };

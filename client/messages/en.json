@@ -37,7 +37,9 @@
     "legalNotice": "All material and intellectual rights of the Body Style website are reserved; any copying is subject to legal action.",
     "phones": "Phone and email",
     "callUs": "Call us",
-    "visit": "Address and hours"
+    "visit": "Address and hours",
+    "developedBy": "Website design & development by <link>Verve Dev Lab</link>",
+    "developerTitle": "Verve Dev Lab — professional website design and web application development"
   },
   "ticket": {
     "title": "Request a call",
