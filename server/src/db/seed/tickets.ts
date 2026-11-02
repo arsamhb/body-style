@@ -8,48 +8,48 @@ export const seedTickets = async (): Promise<void> => {
     console.log('ℹ️  Tickets already seeded — skipping.');
     return;
   }
-  const motor = await CatalogItem.findOne({ slug: 'motor-3kw' });
-  const pump = await CatalogItem.findOne({ slug: 'centrifugal-pump-2' });
+  const smith = await CatalogItem.findOne({ slug: 'smith' });
+  const press = await CatalogItem.findOne({ slug: 'chest-press' });
   const daysAgo = (n: number) => new Date(Date.now() - n * 86400000);
   const rows = [
     {
       name: 'علی رضایی',
       phone: '+989121234567',
       message:
-        'برای خط تولید جدید ۴ عدد الکتروموتور نیاز داریم. لطفاً قیمت پروژه‌ای اعلام کنید.',
+        'برای تجهیز باشگاه به دستگاه اسمیت نیاز داریم. لطفاً قیمت را اعلام کنید.',
       status: 'new',
       source: {
         page: 'catalogItem',
         section: 'item-request',
-        itemId: motor ? String(motor._id) : '',
-        itemSlug: 'motor-3kw',
-        itemTitle: 'الکتروموتور ۳ کیلووات',
-        path: '/catalog/products/motor-3kw',
+        itemId: smith ? String(smith._id) : '',
+        itemSlug: 'smith',
+        itemTitle: 'اسمیت',
+        path: '/catalog/products/smith',
       },
       createdAt: daysAgo(0),
     },
     {
       name: 'Sara Ahmadi',
       phone: '+15550001234',
-      message: 'Do you ship pumps internationally?',
+      message: 'Do you ship the chest press, and what is the price?',
       locale: 'en',
       status: 'new',
       source: {
         page: 'catalogItem',
         section: 'item-request',
-        itemId: pump ? String(pump._id) : '',
-        itemSlug: 'centrifugal-pump-2',
-        itemTitle: 'پمپ سانتریفیوژ ۲ اینچ',
-        path: '/en/catalog/products/centrifugal-pump-2',
+        itemId: press ? String(press._id) : '',
+        itemSlug: 'chest-press',
+        itemTitle: 'پرس سینه',
+        path: '/en/catalog/products/chest-press',
       },
       createdAt: daysAgo(1),
     },
     {
       name: 'مریم احمدی',
       phone: '09351112233',
-      message: 'درخواست مشاوره برای انتخاب اینورتر مناسب.',
+      message: 'برای انتخاب بین پرس سینه و پرس سینه همگرا مشاوره می‌خواهم.',
       status: 'inProgress',
-      adminNote: 'تماس گرفته شد، منتظر لیست تجهیزات.',
+      adminNote: 'تماس گرفته شد، منتظر فهرست دستگاه‌های باشگاه.',
       source: {
         page: 'landing',
         section: 'landing-ticket',
@@ -94,7 +94,7 @@ export const seedTickets = async (): Promise<void> => {
     {
       name: 'زهرا موسوی',
       phone: '09198887766',
-      message: 'قیمت تابلو برق سفارشی برای کارگاه ۲۰۰ متری.',
+      message: 'قیمت ست دستگاه برای یک باشگاه کوچک.',
       status: 'closed',
       adminNote: 'پیش‌فاکتور ارسال شد.',
       source: {
