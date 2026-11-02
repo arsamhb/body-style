@@ -53,6 +53,10 @@ include infra/common.mk
 # ---- app-specific extra targets go below this line -------------------------
 MONGO_DEV_URI := mongodb://localhost:$(HOST_MONGO_PORT)/ghahremani_bodystyle
 
+dev: dev-db ## Hot-reload dev: MongoDB in Docker + native API and web servers (Ctrl-C stops both)
+	@echo "web → http://localhost:$(HOST_WEB_PORT)   api → http://localhost:$(HOST_API_PORT)"
+	@$(MAKE) --no-print-directory -j2 dev-api dev-web
+
 dev-db: doctor ## Start only MongoDB, for the native dev servers below
 	$(COMPOSE) up -d mongo
 
@@ -81,4 +85,4 @@ app-secrets: ## Print strong random values for this app's deploy/.env.prod.examp
 	@echo "# MONGODB_URI must carry the same password as MONGO_INITDB_ROOT_PASSWORD"
 	@echo "# never commit these; store the finished .env in your password manager"
 
-.PHONY: dev-db dev-api dev-web dev-seed seed-prod app-secrets
+.PHONY: dev dev-db dev-api dev-web dev-seed seed-prod app-secrets
