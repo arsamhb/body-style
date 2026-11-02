@@ -29,6 +29,7 @@ export interface CatalogCategorySchema {
   id: string;
   typeId: string;
   slug: string;
+  parentId: string | null;
   name: LocalizedString;
   order: number;
 }

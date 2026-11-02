@@ -70,6 +70,7 @@ export const catalogTypeValidationSchema = Yup.object({
 export const catalogCategoryValidationSchema = Yup.object({
   typeId: Yup.string().required('validation.required'),
   slug,
+  parentId: Yup.string(),
   name: localizedString({ required: true, max: 80 }),
 });
 

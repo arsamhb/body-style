@@ -20,6 +20,8 @@ export interface CatalogTypeFormSchema {
 export interface CatalogCategoryFormSchema {
   typeId: string;
   slug: string;
+  /** Empty string = top-level. */
+  parentId: string;
   name: LocalizedString;
 }
 

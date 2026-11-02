@@ -27,7 +27,7 @@ import { useLocales } from '../LocalesContext';
 import ConfirmDialog from '../ui/ConfirmDialog';
 import Drawer from '../ui/Drawer';
 import EmptyState from '../ui/EmptyState';
-import { FormText } from '../ui/fields';
+import { FormSelect, FormText } from '../ui/fields';
 import PageHeader from '../ui/PageHeader';
 import { useTypeOptions } from './useTypeOptions';
 
@@ -70,6 +70,24 @@ const CategoriesScreen = () => {
   });
   const saving = create.isPending || update.isPending;
 
+  // Parents first, each followed by its sub-categories; orphans (unknown parent) stay top-level.
+  const byId = new Map((categories ?? []).map((c) => [c.id, c]));
+  const isTop = (c: CatalogCategorySchema) => !c.parentId || !byId.has(c.parentId);
+  const ordered = (categories ?? [])
+    .filter(isTop)
+    .flatMap((p) => [p, ...(categories ?? []).filter((c) => c.parentId === p.id)]);
+  // A category can only hang under a top-level one, and a parent with children must stay top.
+  const editing = drawer.category;
+  const hasChildren = Boolean(editing && categories?.some((c) => c.parentId === editing.id));
+  const parentOptions = [
+    { value: '', label: t('catalog.categories.noParent') },
+    ...(hasChildren
+      ? []
+      : (categories ?? [])
+          .filter((c) => isTop(c) && c.id !== editing?.id)
+          .map((c) => ({ value: c.id, label: c.name[defaultLocale] || c.slug }))),
+  ];
+
   return (
     <RequirePermission permission="catalog.categories">
       <PageHeader
@@ -107,14 +125,18 @@ const CategoriesScreen = () => {
       ) : !categories?.length ? (
         <EmptyState icon="folder" title={t('catalog.categories.empty')} />
       ) : (
-        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" role="list">
-          {categories.map((c) => (
+        <ul className="flex flex-col gap-2" role="list">
+          {ordered.map((c) => (
             <li
               key={c.id}
-              className="flex items-center gap-3 rounded-lg border border-line bg-surface p-4"
+              className={
+                isTop(c)
+                  ? 'mt-2 flex items-center gap-3 rounded-lg border border-line bg-surface p-4 first:mt-0'
+                  : 'ms-8 flex items-center gap-3 rounded-lg border border-line bg-surface px-4 py-3'
+              }
             >
-              <span className="icon-tile size-10">
-                <IconByName name="folder" className="size-4" />
+              <span className={isTop(c) ? 'icon-tile size-10' : 'icon-tile size-8'}>
+                <IconByName name={isTop(c) ? 'folder' : 'minus'} className="size-4" />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-body font-medium">{c.name[defaultLocale] || c.slug}</p>
@@ -170,6 +192,12 @@ const CategoriesScreen = () => {
         >
           <Form id={FORM_ID} noValidate className="flex flex-col gap-5">
             <LocalizedTextInput name="name" label={t('catalog.categories.name')} required />
+            <FormSelect
+              name="parentId"
+              label={t('catalog.categories.parent')}
+              hint={t('catalog.categories.parentHint')}
+              options={parentOptions}
+            />
             <FormText
               name="slug"
               label={t('catalog.types.slug')}

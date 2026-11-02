@@ -19,7 +19,8 @@ const ItemGallery = ({ images, alt }: ItemGalleryProps) => {
         src={main}
         alt={alt}
         priority
-        className="aspect-[4/3] rounded-xl border border-line"
+        className="aspect-[4/3] rounded-xs border border-line-strong"
+        imgClassName="saturate-[.86] contrast-110"
         sizes="(max-width: 1024px) 100vw, 50vw"
         placeholderIcon="package"
       />
@@ -32,8 +33,8 @@ const ItemGallery = ({ images, alt }: ItemGalleryProps) => {
                 onClick={() => setActive(i)}
                 aria-pressed={i === active}
                 className={clsx(
-                  'relative size-16 overflow-hidden rounded-md border transition-colors',
-                  i === active ? 'border-ink' : 'border-line hover:border-line-strong'
+                  'relative size-16 overflow-hidden rounded-xs border transition-colors',
+                  i === active ? 'border-brand' : 'border-line hover:border-line-strong'
                 )}
               >
                 <Image src={src} alt="" fill sizes="64px" className="object-cover" />

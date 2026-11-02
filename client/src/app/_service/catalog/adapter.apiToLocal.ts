@@ -58,6 +58,7 @@ export const adminCatalogCategoriesReadResponse2CatalogCategorySchema = (
   id: api.id,
   typeId: api.typeId,
   slug: api.slug,
+  parentId: api.parentId ?? null,
   name: api.name ?? {},
   order: api.order,
 });

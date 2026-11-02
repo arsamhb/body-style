@@ -45,6 +45,7 @@ export const catalogCategoryFormSchema2AdminCatalogCategoriesCreatePayload = (
 ): AdminCatalogCategoriesCreatePayload => ({
   typeId: form.typeId,
   ...(form.slug.trim() ? { slug: form.slug.trim() } : {}),
+  parentId: form.parentId || null,
   name: cleanLocalized(form.name),
 });
 
@@ -52,6 +53,7 @@ export const catalogCategoryFormSchema2AdminCatalogCategoriesUpdatePayload = (
   form: CatalogCategoryFormSchema
 ): AdminCatalogCategoriesUpdatePayload => ({
   ...(form.slug.trim() ? { slug: form.slug.trim() } : {}),
+  parentId: form.parentId || null,
   name: cleanLocalized(form.name),
 });
 

@@ -78,7 +78,8 @@
     "sortNewest": "Newest",
     "sortTitle": "Title",
     "pagination": "Pagination",
-    "askAboutThisText": "Leave your number for pricing, availability or advice about “{title}”."
+    "askAboutThisText": "Leave your number for pricing, availability or advice about “{title}”.",
+    "expand": "Show sub-categories"
   },
   "sections": {
     "faqHint": "Didn't find your answer?",
@@ -531,7 +532,11 @@
         "name": "Name",
         "empty": "No categories yet.",
         "deleteTitle": "Delete category",
-        "deleteText": "The category is removed; items stay."
+        "deleteText": "The category is removed; items stay.",
+        "parent": "Parent category",
+        "noParent": "— None (top level) —",
+        "parentHint": "Only one level of nesting is supported.",
+        "sub": "Sub-category"
       },
       "items": {
         "title": "Products & services",

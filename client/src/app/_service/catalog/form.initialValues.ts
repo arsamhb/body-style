@@ -57,6 +57,7 @@ export const getCatalogCategoryFormInitialValue = (
 ): CatalogCategoryFormSchema => ({
   typeId: category?.typeId ?? typeId,
   slug: category?.slug ?? '',
+  parentId: category?.parentId ?? '',
   name: category?.name ?? {},
 });
 

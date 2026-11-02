@@ -30,6 +30,8 @@ export type CatalogTypeUpdatePayload = Partial<CatalogTypeCreatePayload>;
 export interface CatalogCategoryCreatePayload {
   typeId: string;
   slug?: string;
+  /** Parent category id; null or empty makes it top-level. */
+  parentId?: string | null;
   name: LocalizedString;
   order?: number;
 }

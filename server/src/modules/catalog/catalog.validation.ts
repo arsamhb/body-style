@@ -133,6 +133,7 @@ export const catalogCategoryCreateValidationSchema = noUnknown(
   Yup.object({
     typeId: objectId.required('typeId is required'),
     slug: slugSchema,
+    parentId: objectId.nullable(),
     name: localizedString({ required: true, max: 80 }),
     order: Yup.number().integer().min(0),
   }),
@@ -140,6 +141,7 @@ export const catalogCategoryCreateValidationSchema = noUnknown(
 export const catalogCategoryUpdateValidationSchema = noUnknown(
   Yup.object({
     slug: slugSchema,
+    parentId: objectId.nullable(),
     name: localizedString({ max: 80 }),
     order: Yup.number().integer().min(0),
   }),

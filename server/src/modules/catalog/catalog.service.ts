@@ -228,6 +228,76 @@ export const getCategory = async (
   return c;
 };
 
+/**
+ * Checks a requested parent: same type, top-level itself (one level of nesting), and not the
+ * category being edited. Returns the parent id, or null for a top-level category.
+ */
+const resolveParent = async (
+  typeId: Types.ObjectId,
+  parentId: string | null | undefined,
+  selfId?: Types.ObjectId,
+): Promise<Types.ObjectId | null> => {
+  if (!parentId) return null;
+  const fail = (message: string) =>
+    ApiError.validation([
+      { field: 'parentId', code: 'invalid-parent', message },
+    ]);
+  if (!isValidObjectId(parentId)) throw fail('Invalid id');
+  if (selfId && String(selfId) === parentId)
+    throw fail('A category cannot be its own parent');
+  const parent = await CatalogCategory.findById(parentId);
+  if (!parent || String(parent.typeId) !== String(typeId))
+    throw fail('Parent category does not belong to this type');
+  if (parent.parentId) throw fail('Only one level of nesting is supported');
+  if (selfId && (await CatalogCategory.exists({ parentId: selfId })))
+    throw fail('This category has sub-categories, so it must stay top-level');
+  return parent._id as Types.ObjectId;
+};
+
+/** A category's id plus the ids of its children, so a parent filter matches its whole subtree. */
+export const withChildren = (
+  categories: CatalogCategoryDocument[],
+  ids: Types.ObjectId[],
+): Types.ObjectId[] => {
+  const wanted = new Set(ids.map(String));
+  return categories
+    .filter(
+      (c) =>
+        wanted.has(String(c._id)) ||
+        (c.parentId && wanted.has(String(c.parentId))),
+    )
+    .map((c) => c._id as Types.ObjectId);
+};
+
+/** Published item count per category; a parent counts each item of its subtree once. */
+export const countPublishedByCategory = async (
+  type: CatalogTypeDocument,
+  categories: CatalogCategoryDocument[],
+): Promise<Map<string, number>> => {
+  const items = await CatalogItem.find(
+    { typeId: type._id, status: 'published' },
+    { categoryIds: 1 },
+  ).lean();
+  const parentOf = new Map(
+    categories.map((c) => [
+      String(c._id),
+      c.parentId ? String(c.parentId) : null,
+    ]),
+  );
+  const counts = new Map<string, number>();
+  for (const item of items) {
+    const hit = new Set<string>();
+    for (const id of item.categoryIds.map(String)) {
+      if (!parentOf.has(id)) continue;
+      hit.add(id);
+      const parent = parentOf.get(id);
+      if (parent) hit.add(parent);
+    }
+    hit.forEach((id) => counts.set(id, (counts.get(id) ?? 0) + 1));
+  }
+  return counts;
+};
+
 export const createCategory = async (
   payload: CatalogCategoryCreatePayload,
 ): Promise<CatalogCategoryDocument> => {
@@ -241,6 +311,7 @@ export const createCategory = async (
   const c = await CatalogCategory.create({
     typeId: type._id,
     slug,
+    parentId: await resolveParent(type._id as Types.ObjectId, payload.parentId),
     name: toMap(payload.name),
     order:
       payload.order ??
@@ -266,6 +337,12 @@ export const updateCategory = async (
       throw ApiError.conflict('Slug already in use');
     c.slug = payload.slug;
   }
+  if (payload.parentId !== undefined)
+    c.parentId = await resolveParent(
+      c.typeId,
+      payload.parentId,
+      c._id as Types.ObjectId,
+    );
   if (payload.name !== undefined) c.name = toMap(payload.name);
   if (payload.order !== undefined) c.order = payload.order;
   await c.save();
@@ -279,6 +356,11 @@ export const deleteCategory = async (id: string): Promise<void> => {
   await CatalogItem.updateMany(
     { categoryIds: c._id },
     { $pull: { categoryIds: c._id } },
+  );
+  // Children of a deleted parent become top-level instead of disappearing.
+  await CatalogCategory.updateMany(
+    { parentId: c._id },
+    { $set: { parentId: null } },
   );
   await c.deleteOne();
   const type = await CatalogType.findById(c.typeId);
@@ -305,8 +387,12 @@ export const listItemsPaginated = async ({
   const filter: Record<string, unknown> = {};
   if (typeId && isValidObjectId(typeId)) filter.typeId = typeId;
   if (status === 'draft' || status === 'published') filter.status = status;
-  if (categoryId && isValidObjectId(categoryId))
-    filter.categoryIds = categoryId;
+  if (categoryId && isValidObjectId(categoryId)) {
+    const all = await CatalogCategory.find({
+      $or: [{ _id: categoryId }, { parentId: categoryId }],
+    }).exec();
+    filter.categoryIds = { $in: all.map((c) => c._id) };
+  }
   const search = buildSearch(q, defaultLocale());
   if (search) Object.assign(filter, search);
   const [items, total] = await Promise.all([
@@ -476,9 +562,12 @@ export const listPublishedItems = async (
   const categorySlug =
     typeof query.category === 'string' ? query.category : undefined;
   if (categorySlug && type.filterConfig.categoriesEnabled) {
-    const wanted = categories
-      .filter((c) => categorySlug.split(',').includes(c.slug))
-      .map((c) => c._id);
+    const wanted = withChildren(
+      categories,
+      categories
+        .filter((c) => categorySlug.split(',').includes(c.slug))
+        .map((c) => c._id as Types.ObjectId),
+    );
     and.push(wanted.length ? { categoryIds: { $in: wanted } } : { _id: null });
   }
   if (type.filterConfig.searchEnabled) {

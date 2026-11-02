@@ -270,7 +270,7 @@ const CardTab = () => {
     summary: t('previewSummary'),
     coverImage: '/img/placeholders/product-1.svg',
     featured: true,
-    categories: [{ id: 'c', slug: 'c', name: t('previewCategory') }],
+    categories: [{ id: 'c', slug: 'c', name: t('previewCategory'), parentId: null, itemCount: 0 }],
     badge: byKey(values.cardDesign.badgeSpecKey)
       ? mockSpec(byKey(values.cardDesign.badgeSpecKey)!, locale)
       : undefined,

@@ -7,7 +7,7 @@ import { useState, useTransition } from 'react';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import type { LocaleCode } from '@/i18n/routing';
 import IconByName from '@/shared/UI/IconByName';
-import type { CatalogTypePublic, PublicFilterDefinition } from './types';
+import type { CatalogTypePublic, PublicCatalogCategory, PublicFilterDefinition } from './types';
 
 interface CatalogFiltersProps {
   type: CatalogTypePublic;
@@ -30,6 +30,27 @@ const CatalogFilters = ({ type, total }: CatalogFiltersProps) => {
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const currentQ = searchParams.get('q') ?? '';
+
+  // Category tree: parents with their sub-categories. Branches holding a selection start open.
+  const selectedCats = new Set(list(searchParams.get('category')));
+  const isKnown = (id: string | null) => Boolean(id && type.categories.some((c) => c.id === id));
+  const topCategories = type.categories.filter((c) => !isKnown(c.parentId));
+  const childrenOf = (id: string) => type.categories.filter((c) => c.parentId === id);
+  const [expanded, setExpanded] = useState<Set<string>>(
+    () =>
+      new Set(
+        topCategories
+          .filter((p) => childrenOf(p.id).some((c) => selectedCats.has(c.slug)))
+          .map((p) => p.id)
+      )
+  );
+  const toggleExpanded = (id: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   const update = (mutate: (p: URLSearchParams) => void) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -126,7 +147,7 @@ const CatalogFilters = ({ type, total }: CatalogFiltersProps) => {
                 e.key === 'Enter' &&
                 setParam(`${key}.min`, (e.target as HTMLInputElement).value || null)
               }
-              className="w-full rounded-md border border-line bg-surface px-2 py-1.5 text-small"
+              className="w-full rounded-xs border border-line bg-surface px-2 py-1.5 text-small focus:border-brand"
             />
             <span className="text-ink-subtle">–</span>
             <input
@@ -139,7 +160,7 @@ const CatalogFilters = ({ type, total }: CatalogFiltersProps) => {
                 e.key === 'Enter' &&
                 setParam(`${key}.max`, (e.target as HTMLInputElement).value || null)
               }
-              className="w-full rounded-md border border-line bg-surface px-2 py-1.5 text-small"
+              className="w-full rounded-xs border border-line bg-surface px-2 py-1.5 text-small focus:border-brand"
             />
             {(f.unit || f.currency) && (
               <span className="text-caption text-ink-subtle">{f.unit || f.currency}</span>
@@ -155,7 +176,7 @@ const CatalogFilters = ({ type, total }: CatalogFiltersProps) => {
             onKeyDown={(e) =>
               e.key === 'Enter' && setParam(key, (e.target as HTMLInputElement).value || null)
             }
-            className="w-full rounded-md border border-line bg-surface px-3 py-1.5 text-small"
+            className="w-full rounded-xs border border-line bg-surface px-3 py-1.5 text-small focus:border-brand"
           />
         );
       default:
@@ -172,6 +193,32 @@ const CatalogFilters = ({ type, total }: CatalogFiltersProps) => {
       { value: `${s.key}:desc`, label: `${s.label} ↓` },
     ]),
   ];
+
+  const categoryRow = (
+    c: Pick<PublicCatalogCategory, 'slug' | 'name'> & { itemCount?: number },
+    active: boolean
+  ) => (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={() => (c.slug ? toggleInList('category', c.slug) : setParam('category', null))}
+      className={clsx(
+        'flex w-full items-center justify-between gap-2 rounded-xs px-2 py-1.5 text-start text-small transition-colors',
+        active
+          ? 'bg-brand font-semibold text-brand-ink'
+          : 'text-ink-muted hover:bg-canvas-subtle hover:text-ink'
+      )}
+    >
+      <span className="truncate">{c.name}</span>
+      {c.itemCount !== undefined && (
+        <span
+          className={clsx('text-caption tabular-nums', active ? 'opacity-80' : 'text-ink-subtle')}
+        >
+          {c.itemCount.toLocaleString(locale)}
+        </span>
+      )}
+    </button>
+  );
 
   const panel = (
     <div className="flex flex-col gap-6">
@@ -196,35 +243,46 @@ const CatalogFilters = ({ type, total }: CatalogFiltersProps) => {
             defaultValue={currentQ}
             placeholder={t('searchPlaceholder')}
             aria-label={t('search')}
-            className="w-full rounded-md border border-line bg-surface py-2 ps-9 pe-3 text-small focus:border-ink focus:outline-none"
+            className="w-full rounded-xs border border-line bg-surface py-2 ps-9 pe-3 text-small focus:border-brand focus:outline-none"
           />
         </form>
       )}
       {type.categoriesEnabled && type.categories.length > 0 && (
         <fieldset className="flex flex-col gap-2">
           <legend className="mb-2 text-small font-semibold">{t('category')}</legend>
-          <ul className="flex flex-wrap gap-1.5" role="list">
-            {[{ slug: '', name: t('allCategories') }, ...type.categories].map((c) => {
-              const active = c.slug
-                ? list(searchParams.get('category')).includes(c.slug)
-                : !searchParams.get('category');
+          <ul className="flex flex-col gap-0.5" role="list">
+            <li>{categoryRow({ slug: '', name: t('allCategories') }, !selectedCats.size)}</li>
+            {topCategories.map((p) => {
+              const children = childrenOf(p.id);
+              const open = expanded.has(p.id);
               return (
-                <li key={c.slug || 'all'}>
-                  <button
-                    type="button"
-                    aria-pressed={active}
-                    onClick={() =>
-                      c.slug ? toggleInList('category', c.slug) : setParam('category', null)
-                    }
-                    className={clsx(
-                      'rounded-pill border px-3 py-1 text-caption font-medium transition-colors',
-                      active
-                        ? 'border-brand bg-brand text-brand-ink'
-                        : 'border-line bg-surface text-ink-muted hover:border-ink hover:text-ink'
+                <li key={p.id}>
+                  <div className="flex items-center gap-1">
+                    <div className="min-w-0 flex-1">{categoryRow(p, selectedCats.has(p.slug))}</div>
+                    {children.length > 0 && (
+                      <button
+                        type="button"
+                        aria-expanded={open}
+                        aria-controls={`cat-${p.id}`}
+                        aria-label={`${t('expand')}: ${p.name}`}
+                        onClick={() => toggleExpanded(p.id)}
+                        className="grid size-7 shrink-0 place-items-center rounded-xs text-ink-subtle hover:bg-canvas-subtle hover:text-ink"
+                      >
+                        <IconByName name={open ? 'minus' : 'plus'} className="size-4" />
+                      </button>
                     )}
-                  >
-                    {c.name}
-                  </button>
+                  </div>
+                  {children.length > 0 && open && (
+                    <ul
+                      id={`cat-${p.id}`}
+                      className="ms-3 mt-0.5 flex flex-col gap-0.5 border-s border-line ps-2"
+                      role="list"
+                    >
+                      {children.map((c) => (
+                        <li key={c.id}>{categoryRow(c, selectedCats.has(c.slug))}</li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               );
             })}
@@ -265,7 +323,7 @@ const CatalogFilters = ({ type, total }: CatalogFiltersProps) => {
             <select
               value={searchParams.get('sort') ?? ''}
               onChange={(e) => setParam('sort', e.target.value || null)}
-              className="rounded-md border border-line bg-surface px-2 py-1.5 text-small"
+              className="rounded-xs border border-line bg-surface px-2 py-1.5 text-small focus:border-brand"
             >
               {sortOptions.map((o) => (
                 <option key={o.value} value={o.value}>
@@ -293,7 +351,7 @@ const CatalogFilters = ({ type, total }: CatalogFiltersProps) => {
       {hasFilters && (
         <aside
           className={clsx(
-            'rounded-lg border border-line bg-canvas-subtle p-4 lg:block lg:border-0 lg:bg-transparent lg:p-0',
+            'rounded-xs border border-line bg-canvas-subtle p-5 lg:block lg:border lg:bg-surface/50 lg:p-5',
             open ? 'block' : 'hidden'
           )}
           lang={locale}

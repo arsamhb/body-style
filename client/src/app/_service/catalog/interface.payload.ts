@@ -22,10 +22,12 @@ export interface AdminCatalogTypesWritePayload {
 export interface AdminCatalogCategoriesCreatePayload {
   typeId: string;
   slug?: string;
+  parentId: string | null;
   name: LocalizedString;
 }
 export interface AdminCatalogCategoriesUpdatePayload {
   slug?: string;
+  parentId: string | null;
   name: LocalizedString;
 }
 

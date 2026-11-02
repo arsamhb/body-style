@@ -85,14 +85,14 @@ export default async function CatalogItemPage({ params }: Props) {
 
       <article className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         <ItemGallery images={item.images} alt={item.title} />
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 lg:pt-4">
           <header className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-2">
               {item.categories.map((c) => (
                 <Link
                   key={c.id}
                   href={`${item.type.href}?category=${c.slug}`}
-                  className="rounded-pill border border-line bg-surface px-2.5 py-0.5 text-caption text-ink-muted hover:text-ink"
+                  className="rounded-xs border border-line bg-surface px-2.5 py-1 text-caption font-bold uppercase tracking-wide text-ink-muted transition-colors hover:border-brand hover:text-brand-strong"
                 >
                   {c.name}
                 </Link>
@@ -111,7 +111,7 @@ export default async function CatalogItemPage({ params }: Props) {
                 </span>
               )}
             </div>
-            <h1 className="text-h1">{item.title}</h1>
+            <h1 className="text-display">{item.title}</h1>
             {item.summary && <p className="text-lead text-ink-muted">{item.summary}</p>}
             {item.price && (
               <p className="text-h3 font-semibold tabular-nums">
@@ -126,7 +126,7 @@ export default async function CatalogItemPage({ params }: Props) {
 
       <section
         id="request"
-        className="grid gap-8 rounded-2xl border border-line bg-canvas-subtle p-6 lg:grid-cols-5 lg:gap-12 lg:p-10"
+        className="relative grid gap-8 overflow-hidden rounded-xs border border-line bg-canvas-subtle p-6 before:absolute before:inset-y-0 before:start-0 before:w-1 before:bg-brand lg:grid-cols-5 lg:gap-12 lg:p-10"
       >
         <div className="flex flex-col gap-3 lg:col-span-2">
           <h2 className="text-h2">{t('askAboutThis')}</h2>

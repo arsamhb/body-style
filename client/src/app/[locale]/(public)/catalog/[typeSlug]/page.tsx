@@ -40,9 +40,15 @@ export default async function CatalogTypePage({ params, searchParams }: Props) {
   const labels = { yes: t('yes'), no: t('no') };
 
   return (
-    <Container size="wide" className="section-py-sm flex flex-col gap-8">
-      <header className="flex flex-col gap-3">
-        <h1 className="text-h1">{type.name}</h1>
+    <Container size="wide" className="section-py-sm flex flex-col gap-10">
+      <header className="relative flex flex-col gap-4 overflow-hidden border border-line bg-canvas-subtle px-6 py-10 md:px-10 md:py-14">
+        <div className="absolute inset-y-0 start-0 w-1 bg-brand" />
+        <div className="absolute -end-16 -top-20 size-56 rotate-12 border-[24px] border-line/40" />
+        <span className="inline-flex items-center gap-2 text-caption font-bold uppercase tracking-[0.2em] text-accent">
+          <span className="h-px w-8 bg-accent" />
+          Body Style
+        </span>
+        <h1 className="text-display">{type.name}</h1>
         {type.description && (
           <p className="max-w-3xl text-lead text-ink-muted">{type.description}</p>
         )}
@@ -53,7 +59,7 @@ export default async function CatalogTypePage({ params, searchParams }: Props) {
         </div>
         <div className="flex flex-col gap-8">
           {page.data.length === 0 ? (
-            <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-line-strong p-12 text-center">
+            <div className="flex flex-col items-center gap-3 rounded-xs border border-dashed border-line-strong p-12 text-center">
               <IconByName name="search" className="size-8 text-ink-subtle" />
               <p className="text-body text-ink-muted">{t('noResults')}</p>
             </div>

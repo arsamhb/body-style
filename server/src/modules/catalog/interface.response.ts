@@ -31,6 +31,7 @@ export interface CatalogCategoryAdminResponse {
   id: string;
   typeId: string;
   slug: string;
+  parentId: string | null;
   name: LocalizedString;
   order: number;
 }
@@ -74,6 +75,10 @@ export interface PublicCatalogCategory {
   id: string;
   slug: string;
   name: string;
+  /** Id of the parent category; null for a top-level one. */
+  parentId: string | null;
+  /** Published items in this category (a parent counts its children's items too). */
+  itemCount: number;
 }
 
 export interface CatalogTypePublicSummary {

@@ -36,7 +36,7 @@ const Badge = ({
     return (
       <span
         className={clsx(
-          'inline-flex items-center gap-1 rounded-pill px-2 py-0.5 text-caption font-medium backdrop-blur',
+          'inline-flex items-center gap-1 rounded-xs px-2 py-1 text-caption font-bold uppercase tracking-wide backdrop-blur',
           spec.value ? 'bg-success-soft text-success' : 'bg-surface/90 text-ink-muted'
         )}
       >
@@ -46,7 +46,7 @@ const Badge = ({
     );
   }
   return (
-    <span className="inline-flex rounded-pill bg-surface/90 px-2 py-0.5 text-caption font-medium text-ink backdrop-blur">
+    <span className="inline-flex rounded-xs bg-surface/90 px-2 py-1 text-caption font-bold text-ink backdrop-blur">
       {formatSpecValue(spec, locale, labels)}
     </span>
   );
@@ -112,7 +112,7 @@ const CatalogCard = ({
       className={clsx(ratio, 'w-full')}
       sizes={sizes}
       placeholderIcon="package"
-      imgClassName="transition-transform duration-slow ease-out-expo group-hover:scale-105"
+      imgClassName="saturate-[.82] contrast-110 transition-[transform,filter] duration-slow ease-out-expo group-hover:scale-105 group-hover:saturate-100"
     />
   );
 
@@ -121,21 +121,24 @@ const CatalogCard = ({
       <Wrapper
         {...(wrapperProps as { href: string })}
         className={clsx(
-          'group relative block overflow-hidden rounded-lg border border-line',
+          'group relative block overflow-hidden rounded-xs border border-line bg-surface',
           ratio,
           'w-full',
           !preview && 'card-hover'
         )}
       >
         {image}
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-950/85 via-gray-950/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/35 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-0.5 origin-start scale-x-0 bg-brand transition-transform duration-slow ease-out-expo group-hover:scale-x-100" />
         {item.badge && (
           <div className="absolute start-3 top-3">
             <Badge spec={item.badge} locale={locale} labels={labels} />
           </div>
         )}
-        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-4 text-white">
-          <h3 className="text-h4 text-white line-clamp-1">{item.title}</h3>
+        <div className="on-dark absolute inset-x-0 bottom-0 flex flex-col gap-2 p-5 text-white">
+          <h3 className="text-h3 text-white line-clamp-1 transition-colors group-hover:text-brand-strong">
+            {item.title}
+          </h3>
           {design.showSummary && item.summary && (
             <p className="text-caption text-white/75 line-clamp-2">{item.summary}</p>
           )}
@@ -152,7 +155,7 @@ const CatalogCard = ({
       <Wrapper
         {...(wrapperProps as { href: string })}
         className={clsx(
-          'group flex h-full flex-col gap-3 rounded-lg border border-line bg-surface p-5',
+          'group flex h-full flex-col gap-3 rounded-xs border border-line bg-surface p-5',
           !preview && 'card-hover'
         )}
       >
@@ -174,7 +177,7 @@ const CatalogCard = ({
     <Wrapper
       {...(wrapperProps as { href: string })}
       className={clsx(
-        'group flex h-full overflow-hidden rounded-lg border border-line bg-surface',
+        'group flex h-full overflow-hidden rounded-xs border border-line bg-surface',
         horizontal ? 'flex-row' : 'flex-col',
         !preview && 'card-hover'
       )}
@@ -187,7 +190,7 @@ const CatalogCard = ({
             className="h-full min-h-40 w-full"
             sizes={sizes}
             placeholderIcon="package"
-            imgClassName="transition-transform duration-slow ease-out-expo group-hover:scale-105"
+            imgClassName="saturate-[.82] contrast-110 transition-[transform,filter] duration-slow ease-out-expo group-hover:scale-105 group-hover:saturate-100"
           />
         ) : (
           image
@@ -204,7 +207,9 @@ const CatalogCard = ({
             {item.categories.map((c) => c.name).join(' · ')}
           </span>
         )}
-        <h3 className="text-h4 line-clamp-2">{item.title}</h3>
+        <h3 className="text-h4 line-clamp-2 transition-colors group-hover:text-brand-strong">
+          {item.title}
+        </h3>
         {design.showSummary && item.summary && (
           <p className="text-small text-ink-muted line-clamp-2">{item.summary}</p>
         )}

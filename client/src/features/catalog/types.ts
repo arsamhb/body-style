@@ -81,6 +81,10 @@ export interface PublicCatalogCategory {
   id: string;
   slug: string;
   name: string;
+  /** Parent category id; null for a top-level one. */
+  parentId: string | null;
+  /** Published items in it (a parent counts its sub-categories' items). */
+  itemCount: number;
 }
 
 export interface CatalogTypeSummary {

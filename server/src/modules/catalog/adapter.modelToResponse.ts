@@ -78,6 +78,7 @@ export const catalogCategoryModel2CatalogCategoryAdminResponse = (
   id: String(c._id),
   typeId: String(c.typeId),
   slug: c.slug,
+  parentId: c.parentId ? String(c.parentId) : null,
   name: mapToObject(c.name),
   order: c.order,
 });
@@ -115,10 +116,13 @@ export const itemHref = (typeSlug: string, itemSlug: string) =>
 const categoryPublic = (
   c: CatalogCategoryDocument,
   locale: LocaleCode,
+  counts?: Map<string, number>,
 ): PublicCatalogCategory => ({
   id: String(c._id),
   slug: c.slug,
   name: resolveLocalized(c.name, locale),
+  parentId: c.parentId ? String(c.parentId) : null,
+  itemCount: counts?.get(String(c._id)) ?? 0,
 });
 
 const filterPublic = (
@@ -154,13 +158,14 @@ export const catalogTypeModel2CatalogTypePublicResponse = (
   categories: CatalogCategoryDocument[],
   locale: LocaleCode,
   itemCount: number,
+  categoryCounts?: Map<string, number>,
 ): CatalogTypePublicResponse => {
   const enabled = new Set(type.filterConfig.enabledFilterKeys);
   return {
     ...catalogTypeModel2CatalogTypePublicSummary(type, locale, itemCount),
     categories: [...categories]
       .sort(byOrder)
-      .map((c) => categoryPublic(c, locale)),
+      .map((c) => categoryPublic(c, locale, categoryCounts)),
     filters: [...type.specDefinitions]
       .sort(byOrder)
       .filter((d) => d.filterable && enabled.has(d.key))

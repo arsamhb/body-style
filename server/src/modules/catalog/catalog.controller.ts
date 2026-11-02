@@ -188,6 +188,10 @@ export const publicReadType: RequestHandler = async (req, res) => {
     CatalogCategory.find({ typeId: type._id }).exec(),
     service.countPublishedByType(),
   ]);
+  const categoryCounts = await service.countPublishedByCategory(
+    type,
+    categories,
+  );
   cache(res);
   res.json(
     catalogTypeModel2CatalogTypePublicResponse(
@@ -195,6 +199,7 @@ export const publicReadType: RequestHandler = async (req, res) => {
       categories,
       locale,
       counts.get(String(type._id)) ?? 0,
+      categoryCounts,
     ),
   );
 };
