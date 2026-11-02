@@ -7,6 +7,11 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3
   ''
 );
 
+/** Built-in brand mark, used until a logo is uploaded in the admin panel. */
+export const DEFAULT_LOGO = '/img/logo/logo.png';
+export const DEFAULT_LOGO_WIDTH = 420;
+export const DEFAULT_LOGO_HEIGHT = 320;
+
 /** `/about` → `/about` for the default locale, `/en/about` otherwise (mirrors `as-needed`). */
 export const localizedPath = (path: string, locale: LocaleCode): string => {
   const clean = path === '/' ? '' : path;

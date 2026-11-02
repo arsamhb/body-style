@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import SiteFooter from '@/shared/layout/public/SiteFooter';
 import SiteHeader from '@/shared/layout/public/SiteHeader';
 import { contactWayHref } from '@/features/site/contactWays';
-import { SITE_URL } from '@/lib/seo';
+import { DEFAULT_LOGO, SITE_URL } from '@/lib/seo';
 
 type Props = { children: React.ReactNode; params: LocaleParams };
 
@@ -22,9 +22,10 @@ export default async function PublicLayout({ children, params }: Props) {
     '@type': 'Organization',
     name: site.siteName,
     url: SITE_URL,
-    ...(site.logoUrl
-      ? { logo: site.logoUrl.startsWith('http') ? site.logoUrl : `${SITE_URL}${site.logoUrl}` }
-      : {}),
+    logo: (() => {
+      const logo = site.logoUrl || DEFAULT_LOGO;
+      return logo.startsWith('http') ? logo : `${SITE_URL}${logo}`;
+    })(),
     ...(site.slogan ? { slogan: site.slogan } : {}),
     contactPoint: site.contactWays
       .filter((w) => w.type === 'phone' || w.type === 'email')
@@ -40,7 +41,7 @@ export default async function PublicLayout({ children, params }: Props) {
   };
 
   return (
-    <>
+    <div className="public-site">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -51,6 +52,6 @@ export default async function PublicLayout({ children, params }: Props) {
       <SiteHeader site={site} locale={locale} />
       <main id="content">{children}</main>
       <SiteFooter site={site} locale={locale} />
-    </>
+    </div>
   );
 }
