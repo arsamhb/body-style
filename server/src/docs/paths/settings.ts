@@ -38,6 +38,7 @@ const contactWay = {
         'whatsapp',
         'telegram',
         'instagram',
+        'hours',
       ],
     },
     icon: { type: 'string', example: 'phone' },

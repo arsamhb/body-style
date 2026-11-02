@@ -22,6 +22,7 @@ export const contactWayHref = (way: Pick<PublicContactWay, 'type' | 'value'>): s
     case 'link':
       return isHttp(v) ? v : null;
     case 'address':
+    case 'hours':
     default:
       return null;
   }
@@ -35,6 +36,7 @@ export const DEFAULT_CONTACT_ICON: Record<ContactWayType, string> = {
   whatsapp: 'message-circle',
   telegram: 'send',
   instagram: 'instagram',
+  hours: 'clock',
 };
 
 export const isExternalHref = (href: string) => /^(https?:)?\/\//i.test(href);

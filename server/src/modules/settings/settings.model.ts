@@ -9,6 +9,7 @@ export const CONTACT_WAY_TYPES = [
   'whatsapp',
   'telegram',
   'instagram',
+  'hours',
 ] as const;
 export type ContactWayType = (typeof CONTACT_WAY_TYPES)[number];
 
